@@ -46,6 +46,19 @@ typedef struct {
     int level;
     int points;
     Brick bricks[MAX_ROWS][MAX_COLS];
+    struct {
+        int START_GAME;
+        int QUIT_GAME;
+        int PAUSE_GAME;
+        int KEY_LEFT;
+        int KEY_RIGHT;
+        int KEY_SPACE;
+    } events;
+    struct {
+        int QUIT;
+        int PAUSE;
+        int RUNNING;
+    } state;
 } App;
 
 App app;

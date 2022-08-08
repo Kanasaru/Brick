@@ -13,7 +13,7 @@
 
 #define BOARD_HEIGHT    10
 #define BOARD_WIDTH     50
-#define BOARD_SPEED     20
+#define BOARD_SPEED     5
 
 #define BALL_RADIUS     6
 #define BALL_SPEED      1
