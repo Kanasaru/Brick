@@ -54,13 +54,6 @@ void init_game(void)
     app.level = 1;
     app.points = 0;
     
-    app.events.START_GAME = 0;
-    app.events.QUIT_GAME = 0;
-    app.events.PAUSE_GAME = 0;
-    app.events.KEY_LEFT = 0;
-    app.events.KEY_RIGHT = 0;
-    app.events.KEY_SPACE = 0;
-    
     app.state.QUIT = 0;
     app.state.PAUSE = 0;
     app.state.RUNNING = 0;

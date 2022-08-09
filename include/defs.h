@@ -18,4 +18,13 @@
 #define BALL_RADIUS     6
 #define BALL_SPEED      1
 
+#define BRICK_WIDTH     40
+#define BRICK_HEIGHT    20
+
+#define BRICK_BLUE      1
+#define BRICK_GREEN     2
+#define BRICK_YELLOW    3
+#define BRICK_RED       4
+#define BRICK_PURPLE    5
+
 #endif /* !DEFS_H_ */

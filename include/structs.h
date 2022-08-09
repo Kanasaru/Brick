@@ -16,6 +16,9 @@ typedef struct {
     SDL_Rect rect;
     int speed;
     SDL_Color color;
+    struct {
+        int MOVE;       /* 0 = none, 1 = left, 2 = right */
+    } state;
 } Board;
 
 Board board;
@@ -46,14 +49,6 @@ typedef struct {
     int level;
     int points;
     Brick bricks[MAX_ROWS][MAX_COLS];
-    struct {
-        int START_GAME;
-        int QUIT_GAME;
-        int PAUSE_GAME;
-        int KEY_LEFT;
-        int KEY_RIGHT;
-        int KEY_SPACE;
-    } events;
     struct {
         int QUIT;
         int PAUSE;

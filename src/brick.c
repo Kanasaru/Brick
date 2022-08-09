@@ -22,40 +22,6 @@ Brick create_brick(int x, int y, int hd, float bn, int r, int g, int b)
     return br;
 }
 
-void draw_brick(Brick br)
-{
-    SDL_SetRenderDrawColor(app.renderer, 
-                           br.color.r, 
-                           br.color.g, 
-                           br.color.b, 
-                           br.color.a);
-    SDL_RenderFillRect(app.renderer, &br.rect);
-    
-    SDL_SetRenderDrawColor(app.renderer, 220, 220, 220, 255);
-    SDL_RenderDrawLine(app.renderer, 
-                       br.rect.x, 
-                       br.rect.y, 
-                       br.rect.x + BRICK_WIDTH - 1, 
-                       br.rect.y);
-    SDL_RenderDrawLine(app.renderer, 
-                       br.rect.x, 
-                       br.rect.y, 
-                       br.rect.x, 
-                       br.rect.y + BRICK_HEIGHT - 1);
-    
-    SDL_SetRenderDrawColor(app.renderer, 128, 128, 128, 255);
-    SDL_RenderDrawLine(app.renderer, 
-                       br.rect.x , 
-                       br.rect.y + BRICK_HEIGHT - 1, 
-                       br.rect.x + BRICK_WIDTH - 1, 
-                       br.rect.y + BRICK_HEIGHT - 1);
-    SDL_RenderDrawLine(app.renderer, 
-                       br.rect.x + BRICK_WIDTH - 1, 
-                       br.rect.y + BRICK_HEIGHT - 1, 
-                       br.rect.x + BRICK_WIDTH - 1, 
-                       br.rect.y);
-}
-
 void load_bricks(const int level[MAX_ROWS][MAX_COLS])
 {
     for (int i = 0; i < MAX_ROWS; ++i) {
