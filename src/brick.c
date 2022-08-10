@@ -38,7 +38,7 @@ void load_bricks(const int level[MAX_ROWS][MAX_COLS])
                     app.bricks[i][j].color.g = 0;
                     app.bricks[i][j].color.b = 139;
                     app.bricks[i][j].color.a = 255;
-                break;
+                    break;
                     
                 case BRICK_GREEN:
                     app.bricks[i][j].rect.x = j * BRICK_WIDTH;
@@ -51,7 +51,7 @@ void load_bricks(const int level[MAX_ROWS][MAX_COLS])
                     app.bricks[i][j].color.g = 100;
                     app.bricks[i][j].color.b = 0;
                     app.bricks[i][j].color.a = 255;
-                break;
+                    break;
                     
                 case BRICK_YELLOW:
                     app.bricks[i][j].rect.x = j * BRICK_WIDTH;
@@ -64,7 +64,7 @@ void load_bricks(const int level[MAX_ROWS][MAX_COLS])
                     app.bricks[i][j].color.g = 255;
                     app.bricks[i][j].color.b = 0;
                     app.bricks[i][j].color.a = 255;
-                break;
+                    break;
                     
                 case BRICK_RED:
                     app.bricks[i][j].rect.x = j * BRICK_WIDTH;
@@ -77,7 +77,7 @@ void load_bricks(const int level[MAX_ROWS][MAX_COLS])
                     app.bricks[i][j].color.g = 0;
                     app.bricks[i][j].color.b = 0;
                     app.bricks[i][j].color.a = 255;
-                break;
+                    break;
                     
                 case BRICK_PURPLE:
                     app.bricks[i][j].rect.x = j * BRICK_WIDTH;
@@ -90,11 +90,11 @@ void load_bricks(const int level[MAX_ROWS][MAX_COLS])
                     app.bricks[i][j].color.g = 0;
                     app.bricks[i][j].color.b = 139;
                     app.bricks[i][j].color.a = 255;
-                break;
+                    break;
                 
                 default:
                     app.bricks[i][j].hardness = 0;
-                break;
+                    break;
             }
         }
     }

@@ -16,7 +16,7 @@
 #define BOARD_SPEED     5
 
 #define BALL_RADIUS     6
-#define BALL_SPEED      1
+#define BALL_SPEED      5
 
 #define BRICK_WIDTH     40
 #define BRICK_HEIGHT    20

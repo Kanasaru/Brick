@@ -32,6 +32,7 @@ void handle_events(void)
         }
         /* call event handlers */
         handle_board_event(event);
+        handle_ball_event(event);
     }
 }
 
@@ -59,6 +60,21 @@ void handle_board_event(SDL_Event event)
                 case SDLK_RIGHT:
                 if (board.state.MOVE == 2)
                         board.state.MOVE = 0;
+                    break;
+            }
+            break;
+    }
+}
+
+void handle_ball_event(SDL_Event event)
+{
+    switch (event.type) {
+        case SDL_KEYUP:
+            switch (event.key.keysym.sym) {
+                case SDLK_SPACE:
+                    if (ball.state.MOVE == 0)
+                        ball.state.MOVE = 5;
+                        app.state.RUNNING = 1;
                     break;
             }
             break;

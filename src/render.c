@@ -5,31 +5,27 @@
 #include "structs.h"
 #include "render.h"
 
-void prepareScene(void)
+void draw(void)
+{
+    prepare_screen();
+    
+    draw_panel();
+    draw_current_bricks();
+    draw_board();
+    draw_ball(0);
+    
+    present_screen();
+}
+
+void prepare_screen(void)
 {
     SDL_SetRenderDrawColor(app.renderer, 36, 36, 36, 255);
     SDL_RenderClear(app.renderer);
 }
 
-void presentScene(void)
+void present_screen(void)
 {
     SDL_RenderPresent(app.renderer);
-}
-
-void draw(void)
-{
-    prepareScene();
-    
-    draw_panel(app.renderer, 
-               app.dev.fps, 
-               app.dev.lgcrt, 
-               app.level, 
-               app.points);
-    draw_current_bricks();
-    draw_board(app.renderer);
-    draw_ball(app.renderer, 0);
-    
-    presentScene();
 }
 
 void draw_current_bricks(void)
@@ -77,14 +73,14 @@ void draw_brick(Brick br)
                        br.rect.y);
 }
 
-void draw_board(SDL_Renderer *renderer)
+void draw_board(void)
 {
-    SDL_SetRenderDrawColor(renderer, 
+    SDL_SetRenderDrawColor(app.renderer, 
                            board.color.r, 
                            board.color.g, 
                            board.color.b, 
                            board.color.a);
-    SDL_RenderFillRect(renderer, &board.rect);
+    SDL_RenderFillRect(app.renderer, &board.rect);
     
     SDL_SetRenderDrawColor(app.renderer, 64, 64, 64, 255);
     SDL_RenderDrawLine(app.renderer, 
@@ -111,15 +107,15 @@ void draw_board(SDL_Renderer *renderer)
                        board.rect.y);
 }
 
-void draw_panel(SDL_Renderer *renderer, int fps, float lgcrt, int lvl, int pts)
+void draw_panel(void)
 {
     TTF_Font *font;
     SDL_Surface *text;
     SDL_Texture *text_texture;
     
-    int lgth_fps = snprintf(NULL, 0, "FPS: %d (%f) | ", fps, lgcrt);
-    int lgth_lvl = snprintf(NULL, 0, "LEVEL: %d | ", lvl);
-    int lgth_pts = snprintf(NULL, 0, "POINTS: %d", pts);
+    int lgth_fps = snprintf(NULL, 0, "FPS: %d (%f) | ", app.dev.fps, app.dev.lgcrt);
+    int lgth_lvl = snprintf(NULL, 0, "LEVEL: %d | ", app.level);
+    int lgth_pts = snprintf(NULL, 0, "POINTS: %d", app.points);
     int lgth_str = lgth_fps + lgth_lvl + lgth_pts + 1;
     int padding  = (int) (PANEL_HEIGHT - PANEL_FONT_SIZE * 0.75) / 2 - 1;
     
@@ -130,10 +126,10 @@ void draw_panel(SDL_Renderer *renderer, int fps, float lgcrt, int lvl, int pts)
     char *str = malloc(lgth_str);
     snprintf(str, lgth_str, 
              "FPS: %d (%f) | LEVEL: %d | POINTS: %d", 
-             fps, lgcrt, lvl, pts);
+             app.dev.fps, app.dev.lgcrt, app.level, app.points);
     
-    SDL_SetRenderDrawColor(renderer, color_bg.r, color_bg.g, color_bg.b, 255);
-    SDL_RenderFillRect(renderer, &rect);
+    SDL_SetRenderDrawColor(app.renderer, color_bg.r, color_bg.g, color_bg.b, 255);
+    SDL_RenderFillRect(app.renderer, &rect);
     
     font = TTF_OpenFont(STD_FONT, PANEL_FONT_SIZE * 0.75);
     if (!font) {
@@ -145,10 +141,10 @@ void draw_panel(SDL_Renderer *renderer, int fps, float lgcrt, int lvl, int pts)
         printf("%s\n", TTF_GetError());
     }
 
-    text_texture = SDL_CreateTextureFromSurface(renderer, text);
+    text_texture = SDL_CreateTextureFromSurface(app.renderer, text);
     SDL_Rect dest = { padding, padding, text->w, text->h };
     
-    SDL_RenderCopy(renderer, text_texture, 0, &dest);
+    SDL_RenderCopy(app.renderer, text_texture, 0, &dest);
     
     TTF_CloseFont(font);
     SDL_DestroyTexture(text_texture);
@@ -156,13 +152,13 @@ void draw_panel(SDL_Renderer *renderer, int fps, float lgcrt, int lvl, int pts)
     free(str);
 }
 
-void draw_ball(SDL_Renderer *renderer, int hitbox)
+void draw_ball(int hitbox)
 {
     if (hitbox == 1) {
-        draw_ball_hitbox(renderer);
+        draw_ball_hitbox();
     }
     
-    SDL_SetRenderDrawColor(renderer, 
+    SDL_SetRenderDrawColor(app.renderer, 
                            ball.color.r, 
                            ball.color.g, 
                            ball.color.b, 
@@ -176,15 +172,15 @@ void draw_ball(SDL_Renderer *renderer, int hitbox)
             int dy = ball.radius - h;
             if ((dx*dx + dy*dy) < (ball.radius * ball.radius))
             {
-                SDL_RenderDrawPoint(renderer, 
+                SDL_RenderDrawPoint(app.renderer, 
                                     ball.pos.x + dx, ball.pos.y + dy);
             }
         }
     }
 }
 
-void draw_ball_hitbox(SDL_Renderer *renderer)
+void draw_ball_hitbox(void)
 {
-    SDL_SetRenderDrawColor(renderer, 199, 36, 177, 255);
-    SDL_RenderDrawRect(renderer, &ball.hitbox);
+    SDL_SetRenderDrawColor(app.renderer, 199, 36, 177, 255);
+    SDL_RenderDrawRect(app.renderer, &ball.hitbox);
 }

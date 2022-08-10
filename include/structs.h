@@ -33,6 +33,9 @@ typedef struct {
     float damage;
     SDL_Color color;
     SDL_Rect hitbox;
+    struct {
+        int MOVE;       /* 0 = none, 1 = topleft, 2 = topright, 3 = bottomleft, 4 = bottomright, 5 = waiting */
+    } state;
 } Ball;
 
 Ball ball;
