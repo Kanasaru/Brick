@@ -48,9 +48,11 @@ void init_game(void)
 {
     app.dev.fps = 0;
     app.dev.fps_c = 0;
-    app.dev.fps_n = 0;
-    app.dev.lgcrt = 0.0;
+    app.dev.fps_n = SDL_GetTicks() + 1000;
+    app.dev.prev_time = SDL_GetTicks();
+    app.dev.dt = 0;
     
+    app.lives = 3;
     app.level = 1;
     app.points = 0;
     
@@ -60,24 +62,8 @@ void init_game(void)
     
     load_bricks(LEVEL_01);
     
-    board.rect = (SDL_Rect) { 
-        SCREEN_WIDTH / 2 - BOARD_WIDTH / 2, 
-        SCREEN_HEIGHT - BOARD_HEIGHT * 2, 
-        BOARD_WIDTH, 
-        BOARD_HEIGHT };
-    board.speed = BOARD_SPEED;
-    board.color = (SDL_Color) { 255, 255, 255, 64 };
-    
-    ball.radius = BALL_RADIUS;
-    ball.pos.x = board.rect.x + board.rect.w / 2;
-    ball.pos.y = board.rect.y - ball.radius;
-    ball.hitbox = (SDL_Rect) { 
-        ball.pos.x - ball.radius, 
-        ball.pos.y - ball.radius, 
-        ball.radius * 2 + 1, 
-        ball.radius * 2 + 1 };
-    ball.speed = BALL_SPEED;
-    ball.color = (SDL_Color) { 255, 255, 255, 255 };
+    reset_board();
+    reset_ball();
 }
 
 void clr_init(void)

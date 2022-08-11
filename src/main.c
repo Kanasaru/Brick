@@ -14,6 +14,8 @@ int main(int argc, char **argv)
     init_game();
     
     while (app.state.QUIT == 0) {
+        calc_fpsdt();
+        
         handle_events();
         
         run_logic();

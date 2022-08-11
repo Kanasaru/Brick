@@ -14,7 +14,7 @@ typedef struct {
 
 typedef struct {
     SDL_Rect rect;
-    int speed;
+    float speed;
     SDL_Color color;
     struct {
         int MOVE;       /* 0 = none, 1 = left, 2 = right */
@@ -34,7 +34,7 @@ typedef struct {
     SDL_Color color;
     SDL_Rect hitbox;
     struct {
-        int MOVE;       /* 0 = none, 1 = topleft, 2 = topright, 3 = bottomleft, 4 = bottomright, 5 = waiting */
+        int MOVE;
     } state;
 } Ball;
 
@@ -47,8 +47,10 @@ typedef struct {
         int fps;
         int fps_c;
         long fps_n;
-        float lgcrt;
+        long prev_time;
+        long dt;
     } dev;
+    int lives;
     int level;
     int points;
     Brick bricks[MAX_ROWS][MAX_COLS];

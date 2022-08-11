@@ -9,10 +9,10 @@ void draw(void)
 {
     prepare_screen();
     
-    draw_panel();
     draw_current_bricks();
     draw_board();
     draw_ball(0);
+    draw_panel();
     
     present_screen();
 }
@@ -113,10 +113,11 @@ void draw_panel(void)
     SDL_Surface *text;
     SDL_Texture *text_texture;
     
-    int lgth_fps = snprintf(NULL, 0, "FPS: %d (%f) | ", app.dev.fps, app.dev.lgcrt);
+    int lgth_liv = snprintf(NULL, 0, "LIVES: %d | ", app.lives);
     int lgth_lvl = snprintf(NULL, 0, "LEVEL: %d | ", app.level);
-    int lgth_pts = snprintf(NULL, 0, "POINTS: %d", app.points);
-    int lgth_str = lgth_fps + lgth_lvl + lgth_pts + 1;
+    int lgth_pts = snprintf(NULL, 0, "POINTS: %d | ", app.points);
+    int lgth_fps = snprintf(NULL, 0, "FPS: %d", app.dev.fps);
+    int lgth_str = lgth_liv + lgth_lvl + lgth_pts + lgth_fps + 1;
     int padding  = (int) (PANEL_HEIGHT - PANEL_FONT_SIZE * 0.75) / 2 - 1;
     
     SDL_Color color_txt = { 255, 255, 255 };
@@ -125,8 +126,8 @@ void draw_panel(void)
     
     char *str = malloc(lgth_str);
     snprintf(str, lgth_str, 
-             "FPS: %d (%f) | LEVEL: %d | POINTS: %d", 
-             app.dev.fps, app.dev.lgcrt, app.level, app.points);
+             "LIVES: %d | LEVEL: %d | POINTS: %d | FPS: %d", 
+             app.lives, app.level, app.points, app.dev.fps);
     
     SDL_SetRenderDrawColor(app.renderer, color_bg.r, color_bg.g, color_bg.b, 255);
     SDL_RenderFillRect(app.renderer, &rect);
