@@ -36,8 +36,9 @@ void init_SDL(void)
         exit(EXIT_FAILURE);
     }
     
+    /* app.renderer = SDL_CreateRenderer(app.win, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED); */
     app.renderer = SDL_CreateRenderer(app.win, -1, SDL_RENDERER_ACCELERATED);
-
+    
     if (!app.renderer) {
         printf("Failed to create renderer: %s\n", SDL_GetError());
         exit(EXIT_FAILURE);
