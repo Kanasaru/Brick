@@ -12,5 +12,6 @@ int board_collision(void);
 void move_ball(int direction);
 void ball_lost(void);
 void reset_board(void);
+int brick_collision(void);
 
 #endif /* !LOGIC_H_ */

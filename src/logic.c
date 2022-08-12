@@ -8,7 +8,7 @@
 #include "logic.h"
 
 void calc_fpsdt(void)
-{
+{   
     /* calculate delta time */
     long now;
     now = SDL_GetTicks();
@@ -64,13 +64,42 @@ void run_board_logic(void)
 void run_ball_logic(void)
 {
     if (ball.state.MOVE != BALL_MOVE_NO) {
+        
+        /* 0 = none, 1 = left, 2 = right, 3 = top, 4 = bottom, 5 = tl, 6 = tr, 7 = bl, 8 = br */
+        int brick_hit = brick_collision();
+        int board_hit = board_collision();
+        
         switch (ball.state.MOVE) {
             case BALL_MOVE_TL:
                 if (ball.pos.x <= 0) {
-                    ball.state.MOVE = 2;
+                    ball.state.MOVE = BALL_MOVE_TR;
                 }
                 else if (ball.pos.y - PANEL_HEIGHT <= 0) {
-                    ball.state.MOVE = 3;
+                    ball.state.MOVE = BALL_MOVE_BL;
+                }
+                else if (brick_hit != 0) {
+                    switch(brick_hit) {
+                        case 1:
+                            ball.state.MOVE = BALL_MOVE_TR;
+                            break;
+                        case 2:
+                            break;
+                        case 3:
+                            ball.state.MOVE = BALL_MOVE_BL;
+                            break;
+                        case 4:
+                            break;
+                        case 5:
+                            ball.state.MOVE = BALL_MOVE_BR;
+                            break;
+                        case 6:
+                            break;
+                        case 7:
+                            break;
+                        case 8:
+                            break;
+                    }
+                    move_ball(ball.state.MOVE);
                 }
                 else {
                     move_ball(BALL_MOVE_TL);
@@ -78,10 +107,34 @@ void run_ball_logic(void)
                 break;
             case BALL_MOVE_TR:
                 if (ball.pos.x >= SCREEN_WIDTH) {
-                    ball.state.MOVE = 1;
+                    ball.state.MOVE = BALL_MOVE_TL;
                 }
                 else if (ball.pos.y - PANEL_HEIGHT <= 0) {
-                    ball.state.MOVE = 4;
+                    ball.state.MOVE = BALL_MOVE_BR;
+                }
+                else if (brick_hit != 0) {
+                    switch(brick_hit) {
+                        case 1:
+                            break;
+                        case 2:
+                            ball.state.MOVE = BALL_MOVE_TL;
+                            break;
+                        case 3:
+                            ball.state.MOVE = BALL_MOVE_BR;
+                            break;
+                        case 4:
+                            break;
+                        case 5:
+                            break;
+                        case 6:
+                            ball.state.MOVE = BALL_MOVE_BL;
+                            break;
+                        case 7:
+                            break;
+                        case 8:
+                            break;
+                    }
+                    move_ball(ball.state.MOVE);
                 }
                 else {
                     move_ball(BALL_MOVE_TR);
@@ -89,13 +142,47 @@ void run_ball_logic(void)
                 break;
             case BALL_MOVE_BL:
                 if (ball.pos.x <= 0) {
-                    ball.state.MOVE = 4;
+                    ball.state.MOVE = BALL_MOVE_BR;
                 }
                 else if (ball.pos.y >= SCREEN_HEIGHT) {
                     ball_lost();
                 }
-                else if (board_collision() == 1) {
-                    ball.state.MOVE = 1;
+                else if (board_hit != 0) {
+                    switch(board_hit) {
+                        case 1:
+                            ball.state.MOVE = BALL_MOVE_TL;
+                            break;
+                        case 2:
+                            ball.state.MOVE = BALL_MOVE_TR;
+                            break;
+                        case 3:
+                            break;
+                    }
+                    move_ball(ball.state.MOVE);
+                }
+                else if (brick_hit != 0) {
+                    switch(brick_hit) {
+                        case 1:
+                            ball.state.MOVE = BALL_MOVE_BR;
+                            break;
+                        case 2:
+                            break;
+                        case 3:
+                            break;
+                        case 4:
+                            ball.state.MOVE = BALL_MOVE_TL;
+                            break;
+                        case 5:
+                            break;
+                        case 6:
+                            break;
+                        case 7:
+                            ball.state.MOVE = BALL_MOVE_TR;
+                            break;
+                        case 8:
+                            break;
+                    }
+                    move_ball(ball.state.MOVE);
                 }
                 else {
                     move_ball(BALL_MOVE_BL);
@@ -103,24 +190,59 @@ void run_ball_logic(void)
                 break;
             case BALL_MOVE_BR:
                 if (ball.pos.x >= SCREEN_WIDTH) {
-                    ball.state.MOVE = 3;
+                    ball.state.MOVE = BALL_MOVE_BL;
                 }
                 else if (ball.pos.y >= SCREEN_HEIGHT) {
                     ball_lost();
                 }
-                else if (board_collision() == 1) {
-                    ball.state.MOVE = 2;
+                else if (board_hit != 0) {
+                    switch(board_hit) {
+                        case 1:
+                            ball.state.MOVE = BALL_MOVE_TR;
+                            break;
+                        case 2:
+                            break;
+                        case 3:
+                            ball.state.MOVE = BALL_MOVE_TL;
+                            break;
+                    }
+                    move_ball(ball.state.MOVE);
+                }
+                else if (brick_hit != 0) {
+                    /* 0 = none, 1 = left, 2 = right, 3 = top, 4 = bottom, 5 = tl, 6 = tr, 7 = bl, 8 = br */
+                    switch(brick_hit) {
+                        case 1:
+                            break;
+                        case 2:
+                            ball.state.MOVE = BALL_MOVE_BL;
+                            break;
+                        case 3:
+                            break;
+                        case 4:
+                            ball.state.MOVE = BALL_MOVE_TR;
+                            break;
+                        case 5:
+                            break;
+                        case 6:
+                            break;
+                        case 7:
+                            break;
+                        case 8:
+                            ball.state.MOVE = BALL_MOVE_TL;
+                            break;
+                    }
+                    move_ball(ball.state.MOVE);
                 }
                 else {
                     move_ball(BALL_MOVE_BR);
                 }
                 break;
             case BALL_MOVE_WAIT:
-                if (board.state.MOVE == 1) {
-                    ball.state.MOVE = 1;
+                if (board.state.MOVE == BOARD_MOVE_TL) {
+                    ball.state.MOVE = BALL_MOVE_TL;
                 }
-                else if (board.state.MOVE == 2) {
-                    ball.state.MOVE = 2;
+                else if (board.state.MOVE == BOARD_MOVE_TR) {
+                    ball.state.MOVE = BALL_MOVE_TR;
                 }
                 else {
                     ball.state.MOVE = (rand() % 2) + 1;
@@ -206,10 +328,81 @@ void move_ball(int direction)
 
 int board_collision(void)
 {
-    if (ball.hitbox.y + ball.hitbox.h >= board.rect.y) {
-        if (ball.pos.x >= board.rect.x) {
-            if (ball.pos.x <= board.rect.x + board.rect.w) {
-                return 1;
+    
+    SDL_Rect ball_p_bottom  = { ball.hitbox.x + ball.hitbox.w / 2, ball.hitbox.y + ball.hitbox.h, 1, 1 };
+    SDL_Rect ball_p_c_bl    = { ball.hitbox.x, ball.hitbox.y + ball.hitbox.h, 1, 1 };
+    SDL_Rect ball_p_c_br    = { ball.hitbox.x + ball.hitbox.w, ball.hitbox.y + ball.hitbox.h, 1, 1 };
+    
+    SDL_Rect res_rect;
+    
+    if (SDL_IntersectRect(&board.rect, &ball.hitbox, &res_rect) == SDL_TRUE) {
+        if (SDL_IntersectRect(&board.rect, &ball_p_bottom, &res_rect) == SDL_TRUE) {
+            return 1;
+        }
+        if (SDL_IntersectRect(&board.rect, &ball_p_c_bl, &res_rect) == SDL_TRUE) {
+            return 2;
+        }
+        if (SDL_IntersectRect(&board.rect, &ball_p_c_br, &res_rect) == SDL_TRUE) {
+            return 3;
+        }
+    }
+    
+    return 0;
+}
+
+int brick_collision(void)
+{
+    /* 0 = none, 1 = left, 2 = right, 3 = top, 4 = bottom, 5 = tl, 6 = tr, 7 = bl, 8 = br */
+    SDL_Rect ball_p_top     = { ball.hitbox.x + ball.hitbox.w / 2, ball.hitbox.y, 1, 1 };
+    SDL_Rect ball_p_bottom  = { ball.hitbox.x + ball.hitbox.w / 2, ball.hitbox.y + ball.hitbox.h, 1, 1 };
+    SDL_Rect ball_p_left    = { ball.hitbox.x, ball.hitbox.y + ball.hitbox.h / 2, 1, 1 };
+    SDL_Rect ball_p_right   = { ball.hitbox.x + ball.hitbox.w, ball.hitbox.y + ball.hitbox.h / 2, 1, 1 };
+    
+    SDL_Rect ball_p_c_tl    = { ball.hitbox.x + BALL_CORNER_AC, ball.hitbox.y + BALL_CORNER_AC, 1, 1 };
+    SDL_Rect ball_p_c_tr    = { ball.hitbox.x + ball.hitbox.w - BALL_CORNER_AC, ball.hitbox.y + BALL_CORNER_AC, 1, 1 };
+    SDL_Rect ball_p_c_bl    = { ball.hitbox.x + BALL_CORNER_AC, ball.hitbox.y + ball.hitbox.h - BALL_CORNER_AC, 1, 1 };
+    SDL_Rect ball_p_c_br    = { ball.hitbox.x + ball.hitbox.w - BALL_CORNER_AC, ball.hitbox.y + ball.hitbox.h - BALL_CORNER_AC, 1, 1 };
+    
+    SDL_Rect res_rect;
+
+    for (int i = 0; i < MAX_ROWS; ++i) {
+        for (int j = 0; j < MAX_COLS; ++j) {
+            /* ignore empty ones */
+            if (app.bricks[i][j].hardness > 0) {
+                if (SDL_IntersectRect(&app.bricks[i][j].rect, &ball.hitbox, &res_rect) == SDL_TRUE) {
+                    if (SDL_IntersectRect(&app.bricks[i][j].rect, &ball_p_left, &res_rect) == SDL_TRUE) {
+                        app.bricks[i][j].hardness -= 1;
+                        return 1;
+                    }
+                    if (SDL_IntersectRect(&app.bricks[i][j].rect, &ball_p_right, &res_rect) == SDL_TRUE) {
+                        app.bricks[i][j].hardness -= 1;
+                        return 2;
+                    }
+                    if (SDL_IntersectRect(&app.bricks[i][j].rect, &ball_p_top, &res_rect) == SDL_TRUE) {
+                        app.bricks[i][j].hardness -= 1;
+                        return 3;
+                    }
+                    if (SDL_IntersectRect(&app.bricks[i][j].rect, &ball_p_bottom, &res_rect) == SDL_TRUE) {
+                        app.bricks[i][j].hardness -= 1;
+                        return 4;
+                    }
+                    if (SDL_IntersectRect(&app.bricks[i][j].rect, &ball_p_c_tl, &res_rect) == SDL_TRUE) {
+                        app.bricks[i][j].hardness -= 1;
+                        return 5;
+                    }
+                    if (SDL_IntersectRect(&app.bricks[i][j].rect, &ball_p_c_tr, &res_rect) == SDL_TRUE) {
+                        app.bricks[i][j].hardness -= 1;
+                        return 6;
+                    }
+                    if (SDL_IntersectRect(&app.bricks[i][j].rect, &ball_p_c_bl, &res_rect) == SDL_TRUE) {
+                        app.bricks[i][j].hardness -= 1;
+                        return 7;
+                    }
+                    if (SDL_IntersectRect(&app.bricks[i][j].rect, &ball_p_c_br, &res_rect) == SDL_TRUE) {
+                        app.bricks[i][j].hardness -= 1;
+                        return 8;
+                    }
+                }
             }
         }
     }

@@ -11,7 +11,7 @@ void draw(void)
     
     draw_current_bricks();
     draw_board();
-    draw_ball(0);
+    draw_ball(1);
     draw_panel();
     
     present_screen();

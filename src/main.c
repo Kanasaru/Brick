@@ -7,7 +7,6 @@
 #include "logic.h"
 #include "render.h"
 
-
 int main(int argc, char **argv)
 {
     init_SDL();
@@ -17,7 +16,7 @@ int main(int argc, char **argv)
         calc_fpsdt();
         
         handle_events();
-        
+    
         run_logic();
         
         draw();

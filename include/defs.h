@@ -26,6 +26,7 @@
 #define BALL_MOVE_BL    3
 #define BALL_MOVE_BR    4
 #define BALL_MOVE_WAIT  5
+#define BALL_CORNER_AC  2
 
 #define BRICK_WIDTH     40
 #define BRICK_HEIGHT    20
