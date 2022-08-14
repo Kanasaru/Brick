@@ -1,5 +1,3 @@
-#include <stdio.h>
-
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
 
@@ -36,7 +34,6 @@ void init_SDL(void)
         exit(EXIT_FAILURE);
     }
     
-    /* app.renderer = SDL_CreateRenderer(app.win, -1, SDL_RENDERER_PRESENTVSYNC | SDL_RENDERER_ACCELERATED); */
     app.renderer = SDL_CreateRenderer(app.win, -1, SDL_RENDERER_ACCELERATED);
     
     if (!app.renderer) {
@@ -51,9 +48,8 @@ void init_game(void)
     app.dev.fps_c = 0;
     app.dev.fps_n = SDL_GetTicks() + 1000;
     app.dev.prev_time = SDL_GetTicks();
-    app.dev.dt = 0;
     
-    app.lives = 3;
+    app.lives = STARTING_LIVES;
     app.level = 1;
     app.points = 0;
     

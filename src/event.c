@@ -9,7 +9,6 @@ void handle_events(void)
     SDL_Event event;
     
     while (SDL_PollEvent(&event)) {
-        /* handle general events */
         switch (event.type) {
             case SDL_QUIT:
                 app.state.QUIT = 1;
@@ -30,7 +29,6 @@ void handle_events(void)
                 }
                 break;
         }
-        /* call event handlers */
         handle_board_event(event);
         handle_ball_event(event);
     }

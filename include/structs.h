@@ -17,7 +17,7 @@ typedef struct {
     float speed;
     SDL_Color color;
     struct {
-        int MOVE;       /* 0 = none, 1 = left, 2 = right */
+        int MOVE;
     } state;
 } Board;
 
@@ -49,6 +49,7 @@ typedef struct {
         long fps_n;
         long prev_time;
         long dt;
+        int frc;
     } dev;
     int lives;
     int level;

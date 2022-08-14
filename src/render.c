@@ -11,7 +11,7 @@ void draw(void)
     
     draw_current_bricks();
     draw_board();
-    draw_ball(1);
+    draw_ball(BALL_HITBOX_NO);
     draw_panel();
     
     present_screen();
@@ -118,7 +118,7 @@ void draw_panel(void)
     int lgth_pts = snprintf(NULL, 0, "POINTS: %d | ", app.points);
     int lgth_fps = snprintf(NULL, 0, "FPS: %d", app.dev.fps);
     int lgth_str = lgth_liv + lgth_lvl + lgth_pts + lgth_fps + 1;
-    int padding  = (int) (PANEL_HEIGHT - PANEL_FONT_SIZE * 0.75) / 2 - 1;
+    int padding  = (int) ((PANEL_HEIGHT - PANEL_FONT_SIZE * 0.75) / 2 - 1);
     
     SDL_Color color_txt = { 255, 255, 255 };
     SDL_Color color_bg = { 128, 0, 0 };
@@ -129,7 +129,11 @@ void draw_panel(void)
              "LIVES: %d | LEVEL: %d | POINTS: %d | FPS: %d", 
              app.lives, app.level, app.points, app.dev.fps);
     
-    SDL_SetRenderDrawColor(app.renderer, color_bg.r, color_bg.g, color_bg.b, 255);
+    SDL_SetRenderDrawColor(app.renderer, 
+                           color_bg.r, 
+                           color_bg.g, 
+                           color_bg.b, 
+                           255);
     SDL_RenderFillRect(app.renderer, &rect);
     
     font = TTF_OpenFont(STD_FONT, PANEL_FONT_SIZE * 0.75);
@@ -171,7 +175,7 @@ void draw_ball(int hitbox)
         {
             int dx = ball.radius - w;
             int dy = ball.radius - h;
-            if ((dx*dx + dy*dy) < (ball.radius * ball.radius))
+            if ((dx * dx + dy * dy) < (ball.radius * ball.radius))
             {
                 SDL_RenderDrawPoint(app.renderer, 
                                     ball.pos.x + dx, ball.pos.y + dy);

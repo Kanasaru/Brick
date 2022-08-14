@@ -14,7 +14,7 @@ int main(int argc, char **argv)
     
     while (app.state.QUIT == 0) {
         
-        calc_fpsdt();
+        fps_dt();
         
         handle_events();
     
@@ -22,10 +22,10 @@ int main(int argc, char **argv)
         
         draw();
         
-        SDL_Delay(floor(1000/FPS));
+        SDL_Delay(app.dev.frc);
     }
     
     clr_init();
     
-    return 0;
+    return EXIT_SUCCESS;
 }
