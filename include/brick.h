@@ -1,6 +1,15 @@
 #ifndef BRICK_H_
 #define BRICK_H_
 
+enum brick_types {
+    BRICK_NONE,
+    BRICK_BLUE,
+    BRICK_GREEN,
+    BRICK_YELLOW,
+    BRICK_RED,
+    BRICK_PURPLE
+};
+
 /* creates a brick
  * x, y = position (top-left-corner)
  * hd = hardness

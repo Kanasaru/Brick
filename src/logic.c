@@ -63,134 +63,504 @@ void run_board_logic(void)
 
 void run_ball_logic(void)
 {
+    /* is ball waiting for start? */
+    if (ball.state.MOVE == BALL_MOVE_WAIT) {
+        if (board.state.MOVE == BOARD_MOVE_TL) {
+            ball.state.MOVE = BALL_MOVE_TL;
+        }
+        else if (board.state.MOVE == BOARD_MOVE_TR) {
+            ball.state.MOVE = BALL_MOVE_TR;
+        }
+        else {
+            ball.state.MOVE = (rand() % 2) + 1;
+        }
+    }
+    /* is ball moving? */
     if (ball.state.MOVE != BALL_MOVE_NO) {
-        int brick_hit = brick_collision();
-        int board_hit = board_collision();
-        
-        switch (ball.state.MOVE) {
+        /* calculate new hitbox values */
+        int move_x = ball.speed * app.dev.dt;
+        int move_y = ball.speed * app.dev.dt;
+        int pos_x = ball.hitbox.x;
+        int pos_y = ball.hitbox.y;
+        int hb_w = ball.hitbox.w;
+        int hb_h = ball.hitbox.h;
+        switch (ball.state.MOVE)
+        {
+        case BALL_MOVE_TL:
+            pos_x -= move_x;
+            pos_y -= move_y;
+            break;
+        case BALL_MOVE_TR:
+            pos_x += move_x;
+            pos_y -= move_y;
+            break;
+        case BALL_MOVE_BL:
+            pos_x -= move_x;
+            pos_y+= move_y;
+            break;
+        case BALL_MOVE_BR:
+            pos_x += move_x;
+            pos_y += move_y;
+            break;
+        }
+        /* hitbox */
+        SDL_Rect hitbox = { pos_x, pos_y, hb_w, hb_h };
+        /* calculate collision points */
+        int c_ac = BALL_CORNER_AC;
+        SDL_Rect cp_t = { pos_x + hb_w / 2, pos_y, 1, 1 };
+        SDL_Rect cp_b = { pos_x + hb_w / 2, pos_y + hb_h, 1, 1 };
+        SDL_Rect cp_l = { pos_x, pos_y + hb_h / 2, 1, 1 };
+        SDL_Rect cp_r = { pos_x + hb_w, pos_y + hb_h / 2, 1, 1 };
+        SDL_Rect cp_tl = { pos_x + c_ac, pos_y + c_ac, 1, 1 };
+        SDL_Rect cp_tr = { pos_x + hb_w - c_ac, pos_y + c_ac, 1, 1 };
+        SDL_Rect cp_bl = { pos_x + c_ac, pos_y + hb_h - c_ac, 1, 1 };
+        SDL_Rect cp_br = { pos_x + hb_w - c_ac, pos_y + hb_h - c_ac, 1, 1 };
+        /* collision result rect and hit check */
+        SDL_Rect res;
+        int hit_heck = 0; /* false */
+        int new_direction = BALL_MOVE_NO;
+        /* check if ball collides with walls */
+        /* left wall */
+        if (cp_l.x <= 0) {
+            switch (ball.state.MOVE)
+            {
             case BALL_MOVE_TL:
-                if (ball.pos.x <= 0) {
-                    ball.state.MOVE = BALL_MOVE_TR;
-                }
-                if (ball.pos.y - PANEL_HEIGHT <= 0) {
-                    ball.state.MOVE = BALL_MOVE_BL;
-                }
-                if (brick_hit != BALL_HIT_NONE) {
-                    switch(brick_hit) {
-                        case BALL_HIT_LEFT:
-                            ball.state.MOVE = BALL_MOVE_TR;
-                            break;
-                        case BALL_HIT_TOP:
-                            ball.state.MOVE = BALL_MOVE_BL;
-                            break;
-                        case BALL_HIT_TL:
-                            ball.state.MOVE = BALL_MOVE_BR;
-                            break;
-                    }
-                }
-                move_ball(BALL_MOVE_TL);
+                new_direction = BALL_MOVE_TR;
+                hit_heck = 1;
+                move_x += cp_l.x;
+                move_y += cp_l.x;
                 break;
-            case BALL_MOVE_TR:
-                if (ball.pos.x >= SCREEN_WIDTH) {
-                    ball.state.MOVE = BALL_MOVE_TL;
-                }
-                if (ball.pos.y - PANEL_HEIGHT <= 0) {
-                    ball.state.MOVE = BALL_MOVE_BR;
-                }
-                if (brick_hit != BALL_HIT_NONE) {
-                    switch(brick_hit) {
-                        case BALL_HIT_RIGHT:
-                            ball.state.MOVE = BALL_MOVE_TL;
-                            break;
-                        case BALL_HIT_TOP:
-                            ball.state.MOVE = BALL_MOVE_BR;
-                            break;
-                        case BALL_HIT_TR:
-                            ball.state.MOVE = BALL_MOVE_BL;
-                            break;
-                    }
-                }
-                move_ball(BALL_MOVE_TR);
-                break;
+
             case BALL_MOVE_BL:
-                if (ball.pos.x <= 0) {
-                    ball.state.MOVE = BALL_MOVE_BR;
-                }
-                if (ball.pos.y >= SCREEN_HEIGHT) {
-                    ball_lost();
-                    break;
-                }
-                if (board_hit != BALL_HIT_NONE) {
-                    switch(board_hit) {
-                        case BALL_HIT_BOTTOM:
-                            ball.state.MOVE = BALL_MOVE_TL;
-                            break;
-                        case BALL_HIT_BL:
-                            ball.state.MOVE = BALL_MOVE_TR;
-                            break;
-                    }
-                }
-                if (brick_hit != BALL_HIT_NONE) {
-                    switch(brick_hit) {
-                        case BALL_HIT_LEFT:
-                            ball.state.MOVE = BALL_MOVE_BR;
-                            break;
-                        case BALL_HIT_BOTTOM:
-                            ball.state.MOVE = BALL_MOVE_TL;
-                            break;
-                        case BALL_HIT_BL:
-                            ball.state.MOVE = BALL_MOVE_TR;
-                            break;
-                    }
-                }
-                move_ball(BALL_MOVE_BL);
+                new_direction = BALL_MOVE_BR;
+                hit_heck = 1;
+                move_x += cp_l.x;
+                move_y += cp_l.x;
                 break;
+            }
+        } 
+        /* right wall */
+        else if (cp_r.x >= SCREEN_WIDTH) {
+            switch (ball.state.MOVE)
+            {
+            case BALL_MOVE_TR:
+                new_direction = BALL_MOVE_TL;
+                hit_heck = 1;
+                move_x -= cp_r.x - SCREEN_WIDTH;
+                move_y -= cp_r.x - SCREEN_WIDTH;
+                break;
+
             case BALL_MOVE_BR:
-                if (ball.pos.x >= SCREEN_WIDTH) {
-                    ball.state.MOVE = BALL_MOVE_BL;
-                }
-                if (ball.pos.y >= SCREEN_HEIGHT) {
-                    ball_lost();
-                    break;
-                }
-                if (board_hit != BALL_HIT_NONE) {
-                    switch(board_hit) {
-                        case BALL_HIT_BOTTOM:
-                            ball.state.MOVE = BALL_MOVE_TR;
-                            break;
-                        case BALL_HIT_BR:
-                            ball.state.MOVE = BALL_MOVE_TL;
-                            break;
-                    }
-                }
-                if (brick_hit != BALL_HIT_NONE) {
-                    switch(brick_hit) {
-                        case 1:
-                            break;
-                        case BALL_HIT_RIGHT:
-                            ball.state.MOVE = BALL_MOVE_BL;
-                            break;
-                        case BALL_HIT_BOTTOM:
-                            ball.state.MOVE = BALL_MOVE_TR;
-                            break;
-                        case BALL_HIT_BR:
-                            ball.state.MOVE = BALL_MOVE_TL;
-                            break;
-                    }
-                }
-                move_ball(BALL_MOVE_BR);
+                new_direction = BALL_MOVE_BL;
+                hit_heck = 1;
+                move_x -= cp_r.x - SCREEN_WIDTH;
+                move_y -= cp_r.x - SCREEN_WIDTH;
                 break;
-            case BALL_MOVE_WAIT:
-                if (board.state.MOVE == BOARD_MOVE_TL) {
-                    ball.state.MOVE = BALL_MOVE_TL;
-                }
-                else if (board.state.MOVE == BOARD_MOVE_TR) {
-                    ball.state.MOVE = BALL_MOVE_TR;
+            }
+        }
+        /* panel hit */
+        else if (cp_t.y <= PANEL_HEIGHT) {
+            switch (ball.state.MOVE)
+            {
+            case BALL_MOVE_TL:
+                new_direction = BALL_MOVE_BL;
+                hit_heck = 1;
+                move_x -= PANEL_HEIGHT - cp_t.y;
+                move_y -= PANEL_HEIGHT - cp_t.y;
+                break;
+
+            case BALL_MOVE_TR:
+                new_direction = BALL_MOVE_BR;
+                hit_heck = 1;
+                move_x -= PANEL_HEIGHT - cp_t.y;
+                move_y -= PANEL_HEIGHT - cp_t.y;
+                break;
+            }
+        }
+        /* bottom */
+        else if (cp_b.y >= SCREEN_HEIGHT) {
+            ball_lost();
+        }
+        /* check if ball collides with the board */
+        /* top of the board */
+        else if (SDL_IntersectRect(&board.rect, &cp_b, &res) == SDL_TRUE) {
+            switch (ball.state.MOVE)
+            {
+            case BALL_MOVE_BL:
+                new_direction = BALL_MOVE_TL;
+                hit_heck = 1;
+                move_x -= res.h;
+                move_y -= res.h;
+                break;
+
+            case BALL_MOVE_BR:
+                new_direction = BALL_MOVE_TR;
+                hit_heck = 1;
+                move_x -= res.h;
+                move_y -= res.h;
+                break;
+            }
+        }
+        /* left corner of the board*/
+        else if (SDL_IntersectRect(&board.rect, &cp_br, &res) == SDL_TRUE) {
+            switch (ball.state.MOVE)
+            {
+            case BALL_MOVE_BL:
+                new_direction = BALL_MOVE_TL;
+                hit_heck = 1;
+                if (res.h > res.w) {
+                    move_x -= res.h;
+                    move_y -= res.h;
                 }
                 else {
-                    ball.state.MOVE = (rand() % 2) + 1;
+                    move_x -= res.w;
+                    move_y -= res.w;
                 }
                 break;
+
+            case BALL_MOVE_BR:
+                new_direction = BALL_MOVE_TL;
+                hit_heck = 1;
+                if (res.h > res.w) {
+                    move_x -= res.h;
+                    move_y -= res.h;
+                }
+                else {
+                    move_x -= res.w;
+                    move_y -= res.w;
+                }
+                break;
+            }
+        }
+        /* right corner of the board*/
+        else if (SDL_IntersectRect(&board.rect, &cp_bl, &res) == SDL_TRUE) {
+            switch (ball.state.MOVE)
+            {
+            case BALL_MOVE_BL:
+                new_direction = BALL_MOVE_TR;
+                hit_heck = 1;
+                if (res.h > res.w) {
+                    move_x -= res.h;
+                    move_y -= res.h;
+                }
+                else {
+                    move_x -= res.w;
+                    move_y -= res.w;
+                }
+                break;
+
+            case BALL_MOVE_BR:
+                new_direction = BALL_MOVE_TR;
+                hit_heck = 1;
+                if (res.h > res.w) {
+                    move_x -= res.h;
+                    move_y -= res.h;
+                }
+                else {
+                    move_x -= res.w;
+                    move_y -= res.w;
+                }
+                break;
+            }
+        }
+        /* check if ball collides with a brick */
+        for (int i = 0; i < MAX_ROWS; ++i) {
+            for (int j = 0; j < MAX_COLS; ++j) {
+                if (app.bricks[i][j].hardness > 0) {
+                    if (SDL_IntersectRect(&app.bricks[i][j].rect, 
+                                        &hitbox, &res) == SDL_TRUE) {
+                        /* right brick side*/
+                        if (SDL_IntersectRect(&app.bricks[i][j].rect, 
+                                            &cp_l, &res) == SDL_TRUE) {
+                            app.bricks[i][j].hardness -= 1;
+                            switch (ball.state.MOVE)
+                            {
+                            case BALL_MOVE_TL:
+                                new_direction = BALL_MOVE_TR;
+                                hit_heck = 1;
+                                move_x -= res.w;
+                                move_y -= res.w;
+                                break;
+
+                            case BALL_MOVE_BL:
+                                new_direction = BALL_MOVE_BR;
+                                hit_heck = 1;
+                                move_x -= res.w;
+                                move_y -= res.w;
+                                break;
+                            }
+                        }
+                        /* left brick side */
+                        else if (SDL_IntersectRect(&app.bricks[i][j].rect, 
+                                            &cp_r, &res) == SDL_TRUE) {
+                            app.bricks[i][j].hardness -= 1;
+                            switch (ball.state.MOVE)
+                            {
+                            case BALL_MOVE_TR:
+                                new_direction = BALL_MOVE_TL;
+                                hit_heck = 1;
+                                move_x -= res.w;
+                                move_y -= res.w;
+                                break;
+
+                            case BALL_MOVE_BR:
+                                new_direction = BALL_MOVE_BL;
+                                hit_heck = 1;
+                                move_x -= res.w;
+                                move_y -= res.w;
+                                break;
+                            }
+                        }
+                        /* bottom brick hit */
+                        else if (SDL_IntersectRect(&app.bricks[i][j].rect, 
+                                            &cp_t, &res) == SDL_TRUE) {
+                            app.bricks[i][j].hardness -= 1;
+                            switch (ball.state.MOVE)
+                            {
+                            case BALL_MOVE_TL:
+                                new_direction = BALL_MOVE_BL;
+                                hit_heck = 1;
+                                move_x -= res.h;
+                                move_y -= res.h;
+                                break;
+
+                            case BALL_MOVE_TR:
+                                new_direction = BALL_MOVE_BR;
+                                hit_heck = 1;
+                                move_x -= res.h;
+                                move_y -= res.h;
+                                break;
+                            }
+                        }
+                        /* top brick hit */
+                        else if (SDL_IntersectRect(&app.bricks[i][j].rect, 
+                                            &cp_b, &res) == SDL_TRUE) {
+                            app.bricks[i][j].hardness -= 1;
+                            switch (ball.state.MOVE)
+                            {
+                            case BALL_MOVE_BL:
+                                new_direction = BALL_MOVE_TL;
+                                hit_heck = 1;
+                                move_x -= res.h;
+                                move_y -= res.h;
+                                break;
+
+                            case BALL_MOVE_BR:
+                                new_direction = BALL_MOVE_TR;
+                                hit_heck = 1;
+                                move_x -= res.h;
+                                move_y -= res.h;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        if(!hit_heck) {
+            for (int i = 0; i < MAX_ROWS; ++i) {
+                for (int j = 0; j < MAX_COLS; ++j) {
+                    if (app.bricks[i][j].hardness > 0) {
+                        if (SDL_IntersectRect(&app.bricks[i][j].rect, 
+                                            &hitbox, &res) == SDL_TRUE) {
+                            /* bottom right corner */
+                            if (SDL_IntersectRect(&app.bricks[i][j].rect, 
+                                                &cp_tl, &res) == SDL_TRUE) {
+                                app.bricks[i][j].hardness -= 1;
+                                switch (ball.state.MOVE)
+                                {
+                                case BALL_MOVE_TL:
+                                    new_direction = BALL_MOVE_BR;
+                                    hit_heck = 1;
+                                    if (res.h > res.w) {
+                                        move_x -= res.h;
+                                        move_y -= res.h;
+                                    }
+                                    else {
+                                        move_x -= res.w;
+                                        move_y -= res.w;
+                                    }
+                                    break;
+
+                                case BALL_MOVE_BL:
+                                    new_direction = BALL_MOVE_BR;
+                                    hit_heck = 1;
+                                    if (res.h > res.w) {
+                                        move_x -= res.h;
+                                        move_y -= res.h;
+                                    }
+                                    else {
+                                        move_x -= res.w;
+                                        move_y -= res.w;
+                                    }
+                                    break;
+                                
+                                case BALL_MOVE_TR:
+                                    new_direction = BALL_MOVE_BR;
+                                    hit_heck = 1;
+                                    if (res.h > res.w) {
+                                        move_x -= res.h;
+                                        move_y -= res.h;
+                                    }
+                                    else {
+                                        move_x -= res.w;
+                                        move_y -= res.w;
+                                    }
+                                    break;
+                                }
+                            }
+                            /* bottom left corner */
+                            else if (SDL_IntersectRect(&app.bricks[i][j].rect, 
+                                                &cp_tr, &res) == SDL_TRUE) {
+                                app.bricks[i][j].hardness -= 1;
+                                switch (ball.state.MOVE)
+                                {
+                                case BALL_MOVE_TR:
+                                    new_direction = BALL_MOVE_BL;
+                                    hit_heck = 1;
+                                    if (res.h > res.w) {
+                                        move_x -= res.h;
+                                        move_y -= res.h;
+                                    }
+                                    else {
+                                        move_x -= res.w;
+                                        move_y -= res.w;
+                                    }
+                                    break;
+
+                                case BALL_MOVE_BR:
+                                    new_direction = BALL_MOVE_BL;
+                                    hit_heck = 1;
+                                    if (res.h > res.w) {
+                                        move_x -= res.h;
+                                        move_y -= res.h;
+                                    }
+                                    else {
+                                        move_x -= res.w;
+                                        move_y -= res.w;
+                                    }
+                                    break;
+
+                                case BALL_MOVE_TL:
+                                    new_direction = BALL_MOVE_BL;
+                                    hit_heck = 1;
+                                    if (res.h > res.w) {
+                                        move_x -= res.h;
+                                        move_y -= res.h;
+                                    }
+                                    else {
+                                        move_x -= res.w;
+                                        move_y -= res.w;
+                                    }
+                                    break;
+                                }
+                            }
+                            /* top right corner */
+                            else if (SDL_IntersectRect(&app.bricks[i][j].rect, 
+                                                &cp_bl, &res) == SDL_TRUE) {
+                                app.bricks[i][j].hardness -= 1;
+                                switch (ball.state.MOVE)
+                                {
+                                case BALL_MOVE_BL:
+                                    new_direction = BALL_MOVE_TR;
+                                    hit_heck = 1;
+                                    if (res.h > res.w) {
+                                        move_x -= res.h;
+                                        move_y -= res.h;
+                                    }
+                                    else {
+                                        move_x -= res.w;
+                                        move_y -= res.w;
+                                    }
+                                    break;
+
+                                case BALL_MOVE_BR:
+                                    new_direction = BALL_MOVE_TR;
+                                    hit_heck = 1;
+                                    if (res.h > res.w) {
+                                        move_x -= res.h;
+                                        move_y -= res.h;
+                                    }
+                                    else {
+                                        move_x -= res.w;
+                                        move_y -= res.w;
+                                    }
+                                    break;
+
+                                case BALL_MOVE_TL:
+                                    new_direction = BALL_MOVE_TR;
+                                    hit_heck = 1;
+                                    if (res.h > res.w) {
+                                        move_x -= res.h;
+                                        move_y -= res.h;
+                                    }
+                                    else {
+                                        move_x -= res.w;
+                                        move_y -= res.w;
+                                    }
+                                    break;
+                                }
+                            }
+                            /* top left corner */
+                            else if (SDL_IntersectRect(&app.bricks[i][j].rect, 
+                                                &cp_br, &res) == SDL_TRUE) {
+                                app.bricks[i][j].hardness -= 1;
+                                switch (ball.state.MOVE)
+                                {
+                                case BALL_MOVE_BL:
+                                    new_direction = BALL_MOVE_TL;
+                                    hit_heck = 1;
+                                    if (res.h > res.w) {
+                                        move_x -= res.h;
+                                        move_y -= res.h;
+                                    }
+                                    else {
+                                        move_x -= res.w;
+                                        move_y -= res.w;
+                                    }
+                                    break;
+
+                                case BALL_MOVE_BR:
+                                    new_direction = BALL_MOVE_TL;
+                                    hit_heck = 1;
+                                    if (res.h > res.w) {
+                                        move_x -= res.h;
+                                        move_y -= res.h;
+                                    }
+                                    else {
+                                        move_x -= res.w;
+                                        move_y -= res.w;
+                                    }
+                                    break;
+
+                                case BALL_MOVE_TR:
+                                    new_direction = BALL_MOVE_TL;
+                                    hit_heck = 1;
+                                    if (res.h > res.w) {
+                                        move_x -= res.h;
+                                        move_y -= res.h;
+                                    }
+                                    else {
+                                        move_x -= res.w;
+                                        move_y -= res.w;
+                                    }
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        /* collision detected? */
+        if (hit_heck) {
+            /* move the ball and set new direction */
+            move_ball(move_x, move_y, ball.state.MOVE);
+            ball.state.MOVE = new_direction;
+        }
+        /* not collision, then just move the ball */
+        else {
+            move_ball(move_x, move_y, ball.state.MOVE);
         }
     }
 }
@@ -236,135 +606,32 @@ void reset_board(void)
     board.color = (SDL_Color) { 255, 255, 255, 64 };
 }
 
-void move_ball(int direction)
-{
-    int move_x = ball.speed * app.dev.dt;
-    int move_y = ball.speed * app.dev.dt;
-    
+void move_ball(int x, int y, int direction)
+{  
     switch (direction) {
         case BALL_MOVE_TL:
-            ball.pos.x -= move_x;
-            ball.pos.y -= move_y;
-            ball.hitbox.x -= move_x;
-            ball.hitbox.y -= move_y;
+            ball.pos.x -= x;
+            ball.pos.y -= y;
+            ball.hitbox.x -= x;
+            ball.hitbox.y -= y;
             break;
         case BALL_MOVE_TR:
-            ball.pos.x += move_x;
-            ball.pos.y -= move_y;
-            ball.hitbox.x += move_x;
-            ball.hitbox.y -= move_y;
+            ball.pos.x += x;
+            ball.pos.y -= y;
+            ball.hitbox.x += x;
+            ball.hitbox.y -= y;
             break;
         case BALL_MOVE_BL:
-            ball.pos.x -= move_x;
-            ball.pos.y += move_y;
-            ball.hitbox.x -= move_x;
-            ball.hitbox.y += move_y;
+            ball.pos.x -= x;
+            ball.pos.y += y;
+            ball.hitbox.x -= x;
+            ball.hitbox.y += y;
             break;
         case BALL_MOVE_BR:
-            ball.pos.x += move_x;
-            ball.pos.y += move_y;
-            ball.hitbox.x += move_x;
-            ball.hitbox.y += move_y;
+            ball.pos.x += x;
+            ball.pos.y += y;
+            ball.hitbox.x += x;
+            ball.hitbox.y += y;
             break;
     }
-}
-
-int board_collision(void)
-{
-    
-    SDL_Rect ball_b = { ball.hitbox.x + ball.hitbox.w / 2, 
-                               ball.hitbox.y + ball.hitbox.h, 1, 1 };
-    SDL_Rect ball_bl = { ball.hitbox.x, 
-                             ball.hitbox.y + ball.hitbox.h, 1, 1 };
-    SDL_Rect ball_br = { ball.hitbox.x + ball.hitbox.w, 
-                             ball.hitbox.y + ball.hitbox.h, 1, 1 };
-    SDL_Rect res_rect;
-    
-    if (SDL_IntersectRect(&board.rect, &ball.hitbox, &res_rect) == SDL_TRUE) {
-        if (SDL_IntersectRect(&board.rect, &ball_b, &res_rect) == SDL_TRUE) {
-            return BALL_HIT_BOTTOM;
-        }
-        if (SDL_IntersectRect(&board.rect, &ball_bl, &res_rect) == SDL_TRUE) {
-            return BALL_HIT_BL;
-        }
-        if (SDL_IntersectRect(&board.rect, &ball_br, &res_rect) == SDL_TRUE) {
-            return BALL_HIT_BR;
-        }
-    }
-    return 0;
-}
-
-int brick_collision(void)
-{
-    SDL_Rect ball_t = { ball.hitbox.x + ball.hitbox.w / 2, 
-                            ball.hitbox.y, 1, 1 };
-    SDL_Rect ball_b = { ball.hitbox.x + ball.hitbox.w / 2, 
-                               ball.hitbox.y + ball.hitbox.h, 1, 1 };
-    SDL_Rect ball_l = { ball.hitbox.x, 
-                             ball.hitbox.y + ball.hitbox.h / 2, 1, 1 };
-    SDL_Rect ball_r = { ball.hitbox.x + ball.hitbox.w, 
-                              ball.hitbox.y + ball.hitbox.h / 2, 1, 1 };
-    
-    SDL_Rect ball_tl = { ball.hitbox.x + BALL_CORNER_AC, 
-                             ball.hitbox.y + BALL_CORNER_AC, 1, 1 };
-    SDL_Rect ball_tr = { ball.hitbox.x + ball.hitbox.w - BALL_CORNER_AC, 
-                             ball.hitbox.y + BALL_CORNER_AC, 1, 1 };
-    SDL_Rect ball_bl = { ball.hitbox.x + BALL_CORNER_AC, 
-                             ball.hitbox.y + ball.hitbox.h - BALL_CORNER_AC, 
-                             1, 1 };
-    SDL_Rect ball_br = { ball.hitbox.x + ball.hitbox.w - BALL_CORNER_AC, 
-                             ball.hitbox.y + ball.hitbox.h - BALL_CORNER_AC, 
-                             1, 1 };
-    SDL_Rect res;
-
-    for (int i = 0; i < MAX_ROWS; ++i) {
-        for (int j = 0; j < MAX_COLS; ++j) {
-            if (app.bricks[i][j].hardness > 0) {
-                if (SDL_IntersectRect(&app.bricks[i][j].rect, 
-                                      &ball.hitbox, &res) == SDL_TRUE) {
-                    if (SDL_IntersectRect(&app.bricks[i][j].rect, 
-                                          &ball_l, &res) == SDL_TRUE) {
-                        app.bricks[i][j].hardness -= 1;
-                        return BALL_HIT_LEFT;
-                    }
-                    if (SDL_IntersectRect(&app.bricks[i][j].rect, 
-                                          &ball_r, &res) == SDL_TRUE) {
-                        app.bricks[i][j].hardness -= 1;
-                        return BALL_HIT_RIGHT;
-                    }
-                    if (SDL_IntersectRect(&app.bricks[i][j].rect, 
-                                          &ball_t, &res) == SDL_TRUE) {
-                        app.bricks[i][j].hardness -= 1;
-                        return BALL_HIT_TOP;
-                    }
-                    if (SDL_IntersectRect(&app.bricks[i][j].rect, 
-                                          &ball_b, &res) == SDL_TRUE) {
-                        app.bricks[i][j].hardness -= 1;
-                        return BALL_HIT_BOTTOM;
-                    }
-                    if (SDL_IntersectRect(&app.bricks[i][j].rect, 
-                                          &ball_tl, &res) == SDL_TRUE) {
-                        app.bricks[i][j].hardness -= 1;
-                        return BALL_HIT_TL;
-                    }
-                    if (SDL_IntersectRect(&app.bricks[i][j].rect, 
-                                          &ball_tr, &res) == SDL_TRUE) {
-                        app.bricks[i][j].hardness -= 1;
-                        return BALL_HIT_TR;
-                    }
-                    if (SDL_IntersectRect(&app.bricks[i][j].rect, 
-                                          &ball_bl, &res) == SDL_TRUE) {
-                        app.bricks[i][j].hardness -= 1;
-                        return BALL_HIT_BL;
-                    }
-                    if (SDL_IntersectRect(&app.bricks[i][j].rect, 
-                                          &ball_br, &res) == SDL_TRUE) {
-                        app.bricks[i][j].hardness -= 1;
-                        return BALL_HIT_BR;
-                    }
-                }
-            }
-        }
-    }
-    return BALL_HIT_NONE;
 }

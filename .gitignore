@@ -55,5 +55,8 @@ dkms.conf
 # macOS
 .DS_Store
 
+#vscode
+/.vscode/
+
 # SDL header files
 /include/SDL2/

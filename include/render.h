@@ -5,6 +5,11 @@ extern App app;
 extern Board board;
 extern Ball ball;
 
+enum ball_hitbox {
+    BALL_HITBOX_NO,
+    BALL_HITBOX_YES
+};
+
 /* handles all drawing and calls to drawing functions */
 void draw(void);
 /* prepares the screen for drawing */
