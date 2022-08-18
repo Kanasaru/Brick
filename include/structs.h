@@ -9,6 +9,7 @@ typedef struct {
     SDL_Rect rect;
     int hardness;
     float bonus;
+    int points;
     SDL_Color color;
 } Brick;
 

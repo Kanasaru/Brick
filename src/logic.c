@@ -273,6 +273,9 @@ void run_ball_logic(void)
                         if (SDL_IntersectRect(&app.bricks[i][j].rect, 
                                             &cp_l, &res) == SDL_TRUE) {
                             app.bricks[i][j].hardness -= 1;
+                            if (app.bricks[i][j].hardness == 0) {
+                                app.points += app.bricks[i][j].points;
+                            }
                             switch (ball.state.MOVE)
                             {
                             case BALL_MOVE_TL:
@@ -294,6 +297,9 @@ void run_ball_logic(void)
                         else if (SDL_IntersectRect(&app.bricks[i][j].rect, 
                                             &cp_r, &res) == SDL_TRUE) {
                             app.bricks[i][j].hardness -= 1;
+                            if (app.bricks[i][j].hardness == 0) {
+                                app.points += app.bricks[i][j].points;
+                            }
                             switch (ball.state.MOVE)
                             {
                             case BALL_MOVE_TR:
@@ -315,6 +321,9 @@ void run_ball_logic(void)
                         else if (SDL_IntersectRect(&app.bricks[i][j].rect, 
                                             &cp_t, &res) == SDL_TRUE) {
                             app.bricks[i][j].hardness -= 1;
+                            if (app.bricks[i][j].hardness == 0) {
+                                app.points += app.bricks[i][j].points;
+                            }
                             switch (ball.state.MOVE)
                             {
                             case BALL_MOVE_TL:
@@ -336,6 +345,9 @@ void run_ball_logic(void)
                         else if (SDL_IntersectRect(&app.bricks[i][j].rect, 
                                             &cp_b, &res) == SDL_TRUE) {
                             app.bricks[i][j].hardness -= 1;
+                            if (app.bricks[i][j].hardness == 0) {
+                                app.points += app.bricks[i][j].points;
+                            }
                             switch (ball.state.MOVE)
                             {
                             case BALL_MOVE_BL:
@@ -367,6 +379,9 @@ void run_ball_logic(void)
                             if (SDL_IntersectRect(&app.bricks[i][j].rect, 
                                                 &cp_tl, &res) == SDL_TRUE) {
                                 app.bricks[i][j].hardness -= 1;
+                                if (app.bricks[i][j].hardness == 0) {
+                                    app.points += app.bricks[i][j].points;
+                                }
                                 switch (ball.state.MOVE)
                                 {
                                 case BALL_MOVE_TL:
@@ -413,6 +428,9 @@ void run_ball_logic(void)
                             else if (SDL_IntersectRect(&app.bricks[i][j].rect, 
                                                 &cp_tr, &res) == SDL_TRUE) {
                                 app.bricks[i][j].hardness -= 1;
+                                if (app.bricks[i][j].hardness == 0) {
+                                    app.points += app.bricks[i][j].points;
+                                }
                                 switch (ball.state.MOVE)
                                 {
                                 case BALL_MOVE_TR:
@@ -459,6 +477,9 @@ void run_ball_logic(void)
                             else if (SDL_IntersectRect(&app.bricks[i][j].rect, 
                                                 &cp_bl, &res) == SDL_TRUE) {
                                 app.bricks[i][j].hardness -= 1;
+                                if (app.bricks[i][j].hardness == 0) {
+                                    app.points += app.bricks[i][j].points;
+                                }
                                 switch (ball.state.MOVE)
                                 {
                                 case BALL_MOVE_BL:
@@ -505,6 +526,9 @@ void run_ball_logic(void)
                             else if (SDL_IntersectRect(&app.bricks[i][j].rect, 
                                                 &cp_br, &res) == SDL_TRUE) {
                                 app.bricks[i][j].hardness -= 1;
+                                if (app.bricks[i][j].hardness == 0) {
+                                    app.points += app.bricks[i][j].points;
+                                }
                                 switch (ball.state.MOVE)
                                 {
                                 case BALL_MOVE_BL:
