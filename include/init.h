@@ -9,5 +9,7 @@ void init_SDL(void);
 void init_game(void);
 /* clears init */
 void clr_init(void);
+/* loads images, music and sounds */
+void load_media(void);
 
 #endif /* !INIT_H_ */

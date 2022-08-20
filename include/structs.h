@@ -2,6 +2,7 @@
 #define STRUCTS_H_
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
 
 #include "defs.h"
 
@@ -40,6 +41,17 @@ typedef struct {
 } Ball;
 
 Ball ball;
+
+typedef struct {
+    struct {
+        Mix_Chunk *br_destroy;
+        Mix_Chunk *br_hit;
+        Mix_Chunk *wall_hit;
+        Mix_Chunk *lost;
+    } sounds;
+} Media;
+
+Media media;
 
 typedef struct {
     SDL_Window *win;

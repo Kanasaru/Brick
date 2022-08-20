@@ -14,7 +14,7 @@ OBJDIR = obj
 BINDIR = bin
 
 CFLAGS = -I$(INCDIR)
-LFLAGS = -lSDL2-2.0.0 -lSDL2_image-2.0.0 -lSDL2_ttf-2.0.0
+LFLAGS = -lSDL2-2.0.0 -lSDL2_image-2.0.0 -lSDL2_ttf-2.0.0 -lSDL2_mixer-2.0.0
 
 SOURCES := $(wildcard $(SRCDIR)/*.c)
 OBJECTS := $(SOURCES:$(SRCDIR)/%.c=$(OBJDIR)/%.o)

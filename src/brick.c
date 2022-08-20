@@ -59,7 +59,7 @@ void load_bricks(const int level[MAX_ROWS][MAX_COLS])
                 app.bricks[i][j].rect.y = i * BRICK_HEIGHT + PANEL_HEIGHT;
                 app.bricks[i][j].rect.w = BRICK_WIDTH;
                 app.bricks[i][j].rect.h = BRICK_HEIGHT;
-                app.bricks[i][j].hardness = 5;
+                app.bricks[i][j].hardness = 3;
                 app.bricks[i][j].bonus = 0.3;
                 app.bricks[i][j].points = 25;
                 app.bricks[i][j].color.r = 255;
@@ -73,7 +73,7 @@ void load_bricks(const int level[MAX_ROWS][MAX_COLS])
                 app.bricks[i][j].rect.y = i * BRICK_HEIGHT + PANEL_HEIGHT;
                 app.bricks[i][j].rect.w = BRICK_WIDTH;
                 app.bricks[i][j].rect.h = BRICK_HEIGHT;
-                app.bricks[i][j].hardness = 10;
+                app.bricks[i][j].hardness = 5;
                 app.bricks[i][j].bonus = 0.4;
                 app.bricks[i][j].points = 50;
                 app.bricks[i][j].color.r = 255;
@@ -87,7 +87,7 @@ void load_bricks(const int level[MAX_ROWS][MAX_COLS])
                 app.bricks[i][j].rect.y = i * BRICK_HEIGHT + PANEL_HEIGHT;
                 app.bricks[i][j].rect.w = BRICK_WIDTH;
                 app.bricks[i][j].rect.h = BRICK_HEIGHT;
-                app.bricks[i][j].hardness = 10;
+                app.bricks[i][j].hardness = 7;
                 app.bricks[i][j].bonus = 0.5;
                 app.bricks[i][j].points = 100;
                 app.bricks[i][j].color.r = 139;

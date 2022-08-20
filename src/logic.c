@@ -1,4 +1,5 @@
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
 
 #include "defs.h"
 #include "structs.h"
@@ -138,6 +139,7 @@ void run_ball_logic(void)
                 move_y += cp_l.x;
                 break;
             }
+            Mix_PlayChannel(-1, media.sounds.wall_hit, 0);
         } 
         /* right wall */
         else if (cp_r.x >= SCREEN_WIDTH) {
@@ -157,6 +159,7 @@ void run_ball_logic(void)
                 move_y -= cp_r.x - SCREEN_WIDTH;
                 break;
             }
+            Mix_PlayChannel(-1, media.sounds.wall_hit, 0);
         }
         /* panel hit */
         else if (cp_t.y <= PANEL_HEIGHT) {
@@ -176,6 +179,7 @@ void run_ball_logic(void)
                 move_y -= PANEL_HEIGHT - cp_t.y;
                 break;
             }
+            Mix_PlayChannel(-1, media.sounds.wall_hit, 0);
         }
         /* bottom */
         else if (cp_b.y >= SCREEN_HEIGHT) {
@@ -200,6 +204,7 @@ void run_ball_logic(void)
                 move_y -= res.h;
                 break;
             }
+            Mix_PlayChannel(-1, media.sounds.wall_hit, 0);
         }
         /* left corner of the board*/
         else if (SDL_IntersectRect(&board.rect, &cp_br, &res) == SDL_TRUE) {
@@ -231,6 +236,7 @@ void run_ball_logic(void)
                 }
                 break;
             }
+            Mix_PlayChannel(-1, media.sounds.wall_hit, 0);
         }
         /* right corner of the board*/
         else if (SDL_IntersectRect(&board.rect, &cp_bl, &res) == SDL_TRUE) {
@@ -262,6 +268,7 @@ void run_ball_logic(void)
                 }
                 break;
             }
+            Mix_PlayChannel(-1, media.sounds.wall_hit, 0);
         }
         /* check if ball collides with a brick */
         for (int i = 0; i < MAX_ROWS; ++i) {
@@ -275,6 +282,10 @@ void run_ball_logic(void)
                             app.bricks[i][j].hardness -= 1;
                             if (app.bricks[i][j].hardness == 0) {
                                 app.points += app.bricks[i][j].points;
+                                Mix_PlayChannel(-1, media.sounds.br_destroy, 0);
+                            }
+                            else {
+                                Mix_PlayChannel(-1, media.sounds.br_hit, 0);
                             }
                             switch (ball.state.MOVE)
                             {
@@ -299,6 +310,10 @@ void run_ball_logic(void)
                             app.bricks[i][j].hardness -= 1;
                             if (app.bricks[i][j].hardness == 0) {
                                 app.points += app.bricks[i][j].points;
+                                Mix_PlayChannel(-1, media.sounds.br_destroy, 0);
+                            }
+                            else {
+                                Mix_PlayChannel(-1, media.sounds.br_hit, 0);
                             }
                             switch (ball.state.MOVE)
                             {
@@ -323,6 +338,10 @@ void run_ball_logic(void)
                             app.bricks[i][j].hardness -= 1;
                             if (app.bricks[i][j].hardness == 0) {
                                 app.points += app.bricks[i][j].points;
+                                Mix_PlayChannel(-1, media.sounds.br_destroy, 0);
+                            }
+                            else {
+                                Mix_PlayChannel(-1, media.sounds.br_hit, 0);
                             }
                             switch (ball.state.MOVE)
                             {
@@ -347,6 +366,10 @@ void run_ball_logic(void)
                             app.bricks[i][j].hardness -= 1;
                             if (app.bricks[i][j].hardness == 0) {
                                 app.points += app.bricks[i][j].points;
+                                Mix_PlayChannel(-1, media.sounds.br_destroy, 0);
+                            }
+                            else {
+                                Mix_PlayChannel(-1, media.sounds.br_hit, 0);
                             }
                             switch (ball.state.MOVE)
                             {
@@ -381,6 +404,10 @@ void run_ball_logic(void)
                                 app.bricks[i][j].hardness -= 1;
                                 if (app.bricks[i][j].hardness == 0) {
                                     app.points += app.bricks[i][j].points;
+                                    Mix_PlayChannel(-1, media.sounds.br_destroy, 0);
+                                }
+                                else {
+                                    Mix_PlayChannel(-1, media.sounds.br_hit, 0);
                                 }
                                 switch (ball.state.MOVE)
                                 {
@@ -430,6 +457,10 @@ void run_ball_logic(void)
                                 app.bricks[i][j].hardness -= 1;
                                 if (app.bricks[i][j].hardness == 0) {
                                     app.points += app.bricks[i][j].points;
+                                    Mix_PlayChannel(-1, media.sounds.br_destroy, 0);
+                                }
+                                else {
+                                    Mix_PlayChannel(-1, media.sounds.br_hit, 0);
                                 }
                                 switch (ball.state.MOVE)
                                 {
@@ -479,6 +510,10 @@ void run_ball_logic(void)
                                 app.bricks[i][j].hardness -= 1;
                                 if (app.bricks[i][j].hardness == 0) {
                                     app.points += app.bricks[i][j].points;
+                                    Mix_PlayChannel(-1, media.sounds.br_destroy, 0);
+                                }
+                                else {
+                                    Mix_PlayChannel(-1, media.sounds.br_hit, 0);
                                 }
                                 switch (ball.state.MOVE)
                                 {
@@ -528,6 +563,10 @@ void run_ball_logic(void)
                                 app.bricks[i][j].hardness -= 1;
                                 if (app.bricks[i][j].hardness == 0) {
                                     app.points += app.bricks[i][j].points;
+                                    Mix_PlayChannel(-1, media.sounds.br_destroy, 0);
+                                }
+                                else {
+                                    Mix_PlayChannel(-1, media.sounds.br_hit, 0);
                                 }
                                 switch (ball.state.MOVE)
                                 {
@@ -591,6 +630,7 @@ void run_ball_logic(void)
 
 void ball_lost(void)
 {
+    Mix_PlayChannel(-1, media.sounds.lost, 0);
     if (app.lives == 1) {
         /* game over */
         app.lives = STARTING_LIVES;
