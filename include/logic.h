@@ -24,10 +24,27 @@ enum ball_move {
     BALL_MOVE_WAIT
 };
 
+enum ball_modes {
+    BALL_MODE_NORMAL,
+    BALL_MODE_GM
+};
+
 enum board_move {
     BOARD_MOVE_NO,
     BOARD_MOVE_TL,
     BOARD_MOVE_TR
+};
+
+enum drops_type {
+    DROP_EMPTY,
+    DROP_BOARD_L,
+    DROP_BOARD_S,
+    DROP_BOARD_F,
+    DROP_BOARD_SL,
+    DROP_BALL_F,
+    DROP_BALL_S,
+    DROP_BALL_GM,
+    DROP_EXTRA_LIVE
 };
 
 /* calculates fps, delta time and time for fps capping */
@@ -46,5 +63,13 @@ void move_ball(int x, int y, int direction);
 void ball_lost(void);
 /* resets the boards position to it's starting point */
 void reset_board(void);
+/* create a drop by given position and bonus possibility */
+void create_drop(int x, int y, int bp);
+/* moves the drops, ckecks collision and effects */
+void move_drops(void);
+/* creates an empty drop */
+Drop create_empty_drop(void);
+/* deletes all current drops */
+void reset_drops();
 
 #endif /* !LOGIC_H_ */

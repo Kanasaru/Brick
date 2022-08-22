@@ -279,9 +279,15 @@ void run_ball_logic(void)
                         /* right brick side*/
                         if (SDL_IntersectRect(&app.bricks[i][j].rect, 
                                             &cp_l, &res) == SDL_TRUE) {
-                            app.bricks[i][j].hardness -= 1;
+                            if (ball.state.MODE == 1)
+                                app.bricks[i][j].hardness = 0;
+                            else
+                                app.bricks[i][j].hardness -= 1;
                             if (app.bricks[i][j].hardness == 0) {
                                 app.points += app.bricks[i][j].points;
+                                create_drop(app.bricks[i][j].rect.x, 
+                                            app.bricks[i][j].rect.y, 
+                                            app.bricks[i][j].bonus);
                                 Mix_PlayChannel(-1, media.sounds.br_destroy, 0);
                             }
                             else {
@@ -307,9 +313,15 @@ void run_ball_logic(void)
                         /* left brick side */
                         else if (SDL_IntersectRect(&app.bricks[i][j].rect, 
                                             &cp_r, &res) == SDL_TRUE) {
-                            app.bricks[i][j].hardness -= 1;
+                            if (ball.state.MODE == 1)
+                                app.bricks[i][j].hardness = 0;
+                            else
+                                app.bricks[i][j].hardness -= 1;
                             if (app.bricks[i][j].hardness == 0) {
                                 app.points += app.bricks[i][j].points;
+                                create_drop(app.bricks[i][j].rect.x, 
+                                            app.bricks[i][j].rect.y, 
+                                            app.bricks[i][j].bonus);
                                 Mix_PlayChannel(-1, media.sounds.br_destroy, 0);
                             }
                             else {
@@ -335,9 +347,15 @@ void run_ball_logic(void)
                         /* bottom brick hit */
                         else if (SDL_IntersectRect(&app.bricks[i][j].rect, 
                                             &cp_t, &res) == SDL_TRUE) {
-                            app.bricks[i][j].hardness -= 1;
+                            if (ball.state.MODE == 1)
+                                app.bricks[i][j].hardness = 0;
+                            else
+                                app.bricks[i][j].hardness -= 1;
                             if (app.bricks[i][j].hardness == 0) {
                                 app.points += app.bricks[i][j].points;
+                                create_drop(app.bricks[i][j].rect.x, 
+                                            app.bricks[i][j].rect.y, 
+                                            app.bricks[i][j].bonus);
                                 Mix_PlayChannel(-1, media.sounds.br_destroy, 0);
                             }
                             else {
@@ -363,9 +381,15 @@ void run_ball_logic(void)
                         /* top brick hit */
                         else if (SDL_IntersectRect(&app.bricks[i][j].rect, 
                                             &cp_b, &res) == SDL_TRUE) {
-                            app.bricks[i][j].hardness -= 1;
+                            if (ball.state.MODE == 1)
+                                app.bricks[i][j].hardness = 0;
+                            else
+                                app.bricks[i][j].hardness -= 1;
                             if (app.bricks[i][j].hardness == 0) {
                                 app.points += app.bricks[i][j].points;
+                                create_drop(app.bricks[i][j].rect.x, 
+                                            app.bricks[i][j].rect.y, 
+                                            app.bricks[i][j].bonus);
                                 Mix_PlayChannel(-1, media.sounds.br_destroy, 0);
                             }
                             else {
@@ -401,9 +425,15 @@ void run_ball_logic(void)
                             /* bottom right corner */
                             if (SDL_IntersectRect(&app.bricks[i][j].rect, 
                                                 &cp_tl, &res) == SDL_TRUE) {
-                                app.bricks[i][j].hardness -= 1;
+                                if (ball.state.MODE == 1)
+                                    app.bricks[i][j].hardness = 0;
+                                else
+                                    app.bricks[i][j].hardness -= 1;
                                 if (app.bricks[i][j].hardness == 0) {
                                     app.points += app.bricks[i][j].points;
+                                    create_drop(app.bricks[i][j].rect.x, 
+                                                app.bricks[i][j].rect.y, 
+                                                app.bricks[i][j].bonus);
                                     Mix_PlayChannel(-1, media.sounds.br_destroy, 0);
                                 }
                                 else {
@@ -454,9 +484,15 @@ void run_ball_logic(void)
                             /* bottom left corner */
                             else if (SDL_IntersectRect(&app.bricks[i][j].rect, 
                                                 &cp_tr, &res) == SDL_TRUE) {
-                                app.bricks[i][j].hardness -= 1;
+                                if (ball.state.MODE == 1)
+                                    app.bricks[i][j].hardness = 0;
+                                else
+                                    app.bricks[i][j].hardness -= 1;
                                 if (app.bricks[i][j].hardness == 0) {
                                     app.points += app.bricks[i][j].points;
+                                    create_drop(app.bricks[i][j].rect.x, 
+                                                app.bricks[i][j].rect.y, 
+                                                app.bricks[i][j].bonus);
                                     Mix_PlayChannel(-1, media.sounds.br_destroy, 0);
                                 }
                                 else {
@@ -507,9 +543,15 @@ void run_ball_logic(void)
                             /* top right corner */
                             else if (SDL_IntersectRect(&app.bricks[i][j].rect, 
                                                 &cp_bl, &res) == SDL_TRUE) {
-                                app.bricks[i][j].hardness -= 1;
+                                if (ball.state.MODE == 1)
+                                    app.bricks[i][j].hardness = 0;
+                                else
+                                    app.bricks[i][j].hardness -= 1;
                                 if (app.bricks[i][j].hardness == 0) {
                                     app.points += app.bricks[i][j].points;
+                                    create_drop(app.bricks[i][j].rect.x, 
+                                                app.bricks[i][j].rect.y, 
+                                                app.bricks[i][j].bonus);
                                     Mix_PlayChannel(-1, media.sounds.br_destroy, 0);
                                 }
                                 else {
@@ -560,9 +602,15 @@ void run_ball_logic(void)
                             /* top left corner */
                             else if (SDL_IntersectRect(&app.bricks[i][j].rect, 
                                                 &cp_br, &res) == SDL_TRUE) {
-                                app.bricks[i][j].hardness -= 1;
+                                if (ball.state.MODE == 1)
+                                    app.bricks[i][j].hardness = 0;
+                                else
+                                    app.bricks[i][j].hardness -= 1;
                                 if (app.bricks[i][j].hardness == 0) {
                                     app.points += app.bricks[i][j].points;
+                                    create_drop(app.bricks[i][j].rect.x, 
+                                                app.bricks[i][j].rect.y, 
+                                                app.bricks[i][j].bonus);
                                     Mix_PlayChannel(-1, media.sounds.br_destroy, 0);
                                 }
                                 else {
@@ -625,6 +673,8 @@ void run_ball_logic(void)
         else {
             move_ball(move_x, move_y, ball.state.MOVE);
         }
+
+        move_drops();
     }
 }
 
@@ -639,6 +689,7 @@ void ball_lost(void)
         app.lives -= 1;
     }
     app.state.RUNNING = 0;
+    reset_drops();
     reset_board();
     reset_ball();
 }
@@ -649,6 +700,7 @@ void reset_ball(void)
     ball.speed = BALL_SPEED;
     ball.color = (SDL_Color) { 255, 255, 255, 255 };
     ball.state.MOVE = BALL_MOVE_NO;
+    ball.state.MODE = BALL_MODE_NORMAL;
     ball.pos.x = board.rect.x + board.rect.w / 2;
     ball.pos.y = board.rect.y - ball.radius;
     ball.hitbox = (SDL_Rect) { 
@@ -698,4 +750,129 @@ void move_ball(int x, int y, int direction)
             ball.hitbox.y += y;
             break;
     }
+}
+
+void create_drop(int x, int y, int bp)
+{
+    int bp_val = (rand() % 100);
+
+    if (bp >= bp_val) {
+        for (int i = 0; i < MAX_DROPS; ++i) {
+            if (app.drops[i].type == DROP_EMPTY) {
+                app.drops[i].radius = DROP_RADIUS;
+                app.drops[i].speed = DROP_SPEED;
+                app.drops[i].type = (rand() % 8) + 1;
+                if (app.drops[i].type == DROP_BOARD_L ||
+                    app.drops[i].type == DROP_BOARD_S) {
+                    app.drops[i].color = (SDL_Color) { 0, 0, 255, 255 };
+                }
+                if (app.drops[i].type == DROP_BALL_F ||
+                    app.drops[i].type == DROP_BALL_S) {
+                    app.drops[i].color = (SDL_Color) { 127, 0, 255, 255 };
+                }
+                if (app.drops[i].type == DROP_BOARD_F ||
+                    app.drops[i].type == DROP_BOARD_SL) {
+                    app.drops[i].color = (SDL_Color) { 0, 128, 255, 255 };
+                }
+                if (app.drops[i].type == DROP_BALL_GM ||
+                    app.drops[i].type == DROP_EXTRA_LIVE) {
+                    app.drops[i].color = (SDL_Color) { 255, 0, 127, 255 };
+                }
+                app.drops[i].pos.x = x;
+                app.drops[i].pos.y = y;
+                app.drops[i].hitbox = (SDL_Rect) { 
+                    app.drops[i].pos.x - app.drops[i].radius, 
+                    app.drops[i].pos.y - app.drops[i].radius, 
+                    app.drops[i].radius * 2 + 1, 
+                    app.drops[i].radius * 2 + 1 };
+                
+                i = MAX_DROPS;
+            }
+        }
+    }
+}
+
+void move_drops(void)
+{
+    for (int i = 0; i < MAX_DROPS; ++i) {
+        if (app.drops[i].type != DROP_EMPTY) { 
+            int pos_x = app.drops[i].pos.x;
+            int pos_y = app.drops[i].pos.y;
+            int hb_w = app.drops[i].hitbox.w;
+            int hb_h = app.drops[i].hitbox.h;
+
+            SDL_Rect res;
+
+            SDL_Rect cp_b = { pos_x + hb_w / 2, pos_y + hb_h, 1, 1 };
+            SDL_Rect cp_l = { pos_x, pos_y + hb_h / 2, 1, 1 };
+            SDL_Rect cp_r = { pos_x + hb_w, pos_y + hb_h / 2, 1, 1 };
+
+            if (SDL_IntersectRect(&board.rect, &cp_b, &res) == SDL_TRUE || 
+                SDL_IntersectRect(&board.rect, &cp_l, &res) == SDL_TRUE || 
+                SDL_IntersectRect(&board.rect, &cp_r, &res) == SDL_TRUE) {
+                
+                Mix_PlayChannel(-1, media.sounds.effect, 0);
+
+                /* effects */
+                switch (app.drops[i].type)
+                {
+                case DROP_BOARD_L:
+                    board.rect.w += (int) (board.rect.w * EFF_BO_LONGER);
+                    break;
+                case DROP_BOARD_S:
+                    board.rect.w -= (int) (board.rect.w * EFF_BO_SMALLER);
+                    break;
+                case DROP_BALL_F:
+                    ball.speed += EFF_BA_SPEED_UP;
+                    break;
+                case DROP_BALL_S:
+                    ball.speed -= EFF_BA_SPEED_DOWN;
+                    break;
+                case DROP_BOARD_F:
+                    ball.speed += EFF_BO_SPEED_UP;
+                    break;
+                case DROP_BOARD_SL:
+                    ball.speed -= EFF_BO_SPEED_DOWN;
+                    break;
+                case DROP_BALL_GM:
+                    ball.state.MODE = BALL_MODE_GM;
+                    break;
+                case DROP_EXTRA_LIVE:
+                    app.lives += 1;
+                    break;
+                }
+
+                app.drops[i] = create_empty_drop();
+            }
+            else if (cp_b.y >= SCREEN_HEIGHT) {
+                app.drops[i] = create_empty_drop();
+            }
+            else {
+                app.drops[i].pos.y += DROP_SPEED * app.dev.dt;
+                app.drops[i].hitbox.y += DROP_SPEED * app.dev.dt;
+            }
+        }
+    }
+}
+
+void reset_drops()
+{
+    for (int i = 0; i < MAX_DROPS; ++i) {
+        app.drops[i] = create_empty_drop();
+    }
+}
+
+Drop create_empty_drop(void)
+{
+    Drop empty_drop;
+
+    empty_drop.type = DROP_EMPTY;
+    empty_drop.radius = 0;
+    empty_drop.hitbox = (SDL_Rect) { 0, 0, 0, 0 };
+    empty_drop.pos.x = 0;
+    empty_drop.pos.y = 0;
+    empty_drop.speed = 0;
+    empty_drop.color = (SDL_Color) { 0, 0, 0, 0 };
+
+    return empty_drop;
 }

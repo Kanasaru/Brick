@@ -10,6 +10,7 @@ void draw(void)
     prepare_screen();
     
     draw_current_bricks();
+    draw_current_drops();
     draw_board();
     draw_ball(BALL_HITBOX_NO);
     draw_panel();
@@ -86,24 +87,24 @@ void draw_board(void)
     SDL_RenderDrawLine(app.renderer, 
                        board.rect.x, 
                        board.rect.y, 
-                       board.rect.x + BOARD_WIDTH - 1, 
+                       board.rect.x + board.rect.w - 1, 
                        board.rect.y);
     SDL_RenderDrawLine(app.renderer, 
                        board.rect.x, 
                        board.rect.y, 
                        board.rect.x, 
-                       board.rect.y + BOARD_HEIGHT - 1);
+                       board.rect.y + board.rect.h - 1);
     
     SDL_SetRenderDrawColor(app.renderer, 100, 100, 100, 255);
     SDL_RenderDrawLine(app.renderer, 
                        board.rect.x, 
-                       board.rect.y + BOARD_HEIGHT - 1, 
-                       board.rect.x + BOARD_WIDTH - 1, 
-                       board.rect.y + BOARD_HEIGHT - 1);
+                       board.rect.y + board.rect.h - 1, 
+                       board.rect.x + board.rect.w - 1, 
+                       board.rect.y + board.rect.h - 1);
     SDL_RenderDrawLine(app.renderer, 
-                       board.rect.x + BOARD_WIDTH - 1, 
-                       board.rect.y + BOARD_HEIGHT - 1, 
-                       board.rect.x + BOARD_WIDTH - 1, 
+                       board.rect.x + board.rect.w - 1, 
+                       board.rect.y + board.rect.h - 1, 
+                       board.rect.x + board.rect.w - 1, 
                        board.rect.y);
 }
 
@@ -139,11 +140,13 @@ void draw_panel(void)
     font = TTF_OpenFont(STD_FONT, PANEL_FONT_SIZE * 0.75);
     if (!font) {
         printf("%s\n", TTF_GetError());
+        exit(EXIT_FAILURE);
     }
     
     text = TTF_RenderText_Solid(font, str, color_txt);
     if (!text) {
         printf("%s\n", TTF_GetError());
+        exit(EXIT_FAILURE);
     }
 
     text_texture = SDL_CreateTextureFromSurface(app.renderer, text);
@@ -188,4 +191,36 @@ void draw_ball_hitbox(void)
 {
     SDL_SetRenderDrawColor(app.renderer, 199, 36, 177, 255);
     SDL_RenderDrawRect(app.renderer, &ball.hitbox);
+}
+
+void draw_drop(Drop drop)
+{
+    SDL_SetRenderDrawColor(app.renderer, 
+                           drop.color.r, 
+                           drop.color.g, 
+                           drop.color.b, 
+                           drop.color.a);
+    
+    for (int w = 0; w < drop.radius * 2; w++)
+    {
+        for (int h = 0; h < drop.radius * 2; h++)
+        {
+            int dx = drop.radius - w;
+            int dy = drop.radius - h;
+            if ((dx * dx + dy * dy) < (drop.radius * drop.radius))
+            {
+                SDL_RenderDrawPoint(app.renderer, 
+                                    drop.pos.x + dx, drop.pos.y + dy);
+            }
+        }
+    }
+}
+
+void draw_current_drops(void)
+{
+    for (int i = 0; i < MAX_DROPS; ++i) {
+        if (app.drops[i].type != 0) {
+            draw_drop(app.drops[i]);
+        }
+    }
 }

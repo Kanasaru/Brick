@@ -28,5 +28,9 @@ void draw_panel(void);
 void draw_ball(int hitbox);
 /* draws the balls hitbox */
 void draw_ball_hitbox(void);
+/* draws a single brop by given drop */
+void draw_drop(Drop drop);
+/* draws current drops */
+void draw_current_drops(void);
 
 #endif /* !RENDER_H_ */

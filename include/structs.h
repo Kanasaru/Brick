@@ -9,10 +9,22 @@
 typedef struct {
     SDL_Rect rect;
     int hardness;
-    float bonus;
+    int bonus;
     int points;
     SDL_Color color;
 } Brick;
+
+typedef struct {
+    struct {
+        int x;
+        int y;
+    } pos;
+    int radius;
+    float speed;
+    int type;
+    SDL_Color color;
+    SDL_Rect hitbox;
+} Drop;
 
 typedef struct {
     SDL_Rect rect;
@@ -37,6 +49,7 @@ typedef struct {
     SDL_Rect hitbox;
     struct {
         int MOVE;
+        int MODE;
     } state;
 } Ball;
 
@@ -48,6 +61,7 @@ typedef struct {
         Mix_Chunk *br_hit;
         Mix_Chunk *wall_hit;
         Mix_Chunk *lost;
+        Mix_Chunk *effect;
     } sounds;
 } Media;
 
@@ -68,6 +82,7 @@ typedef struct {
     int level;
     int points;
     Brick bricks[MAX_ROWS][MAX_COLS];
+    Drop drops[MAX_DROPS];
     struct {
         int QUIT;
         int PAUSE;

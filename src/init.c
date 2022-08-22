@@ -68,7 +68,8 @@ void init_game(void)
     app.state.RUNNING = 0;
     
     load_bricks(LEVEL_01);
-    
+
+    reset_drops();
     reset_board();
     reset_ball();
 }
@@ -78,9 +79,13 @@ void clr_init(void)
     Mix_FreeChunk(media.sounds.br_destroy);
     Mix_FreeChunk(media.sounds.br_hit);
     Mix_FreeChunk(media.sounds.wall_hit);
+    Mix_FreeChunk(media.sounds.lost);
+    Mix_FreeChunk(media.sounds.effect);
     media.sounds.br_destroy = NULL;
     media.sounds.br_hit = NULL;
     media.sounds.wall_hit = NULL;
+    media.sounds.lost = NULL;
+    media.sounds.effect = NULL;
 
     Mix_Quit();
     TTF_Quit();
@@ -104,6 +109,10 @@ void load_media(void)
                     "Failed sound: %s\n", Mix_GetError());
     media.sounds.lost = Mix_LoadWAV(SOUND_LOST);
     if (media.sounds.wall_hit == NULL)
+        SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, 
+                    "Failed sound: %s\n", Mix_GetError());
+    media.sounds.effect = Mix_LoadWAV(SOUND_EFFECT);
+    if (media.sounds.effect == NULL)
         SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, 
                     "Failed sound: %s\n", Mix_GetError());
 }

@@ -27,5 +27,17 @@
 #define SOUND_WB_HIT    "assets/hit_wall.wav"
 #define SOUND_BR_DES    "assets/brick_destroy.wav"
 #define SOUND_LOST      "assets/lost.wav"
+#define SOUND_EFFECT    "assets/effect.wav"
+
+#define MAX_DROPS       1
+#define DROP_RADIUS     9
+#define DROP_SPEED      0.09
+
+#define EFF_BO_LONGER       0.2
+#define EFF_BO_SMALLER      0.2
+#define EFF_BA_SPEED_UP     0.05
+#define EFF_BA_SPEED_DOWN   0.05
+#define EFF_BO_SPEED_UP     0.05
+#define EFF_BO_SPEED_DOWN   0.05
 
 #endif /* !DEFS_H_ */
