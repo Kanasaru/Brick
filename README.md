@@ -1,22 +1,8 @@
 # Brick
 
-### road to 1.0.0
-- [ ] add 10 level
-- [ ] add game over screen
-- [X] counting points
-- [X] add bonus drops
-    - board gets longer
-    - board gets shorter
-    - ball gets faster
-    - ball gets slower
-    - board gets faster
-    - board gets slower
-    - extra life
-    - ball has god mode
-- [ ] add show in-game time
-- [X] add sounds
+Brick is a game I used as a first exercise for the Simple DirectMedia Layer Library with C. The source code is not really cleanly written and can be improved in many places. I might catch up on that again, but it's playable in this version and it served the purpose.
 
-# credits
+### credits
 
 Sound "hit_wall.wav" by [CC0_Sound](https://freesound.org/people/CC0_Sound/) |
 Published under CC Zero on [freesound.org](https://freesound.org/people/CC0_Sound/sounds/610026/)

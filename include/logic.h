@@ -72,4 +72,10 @@ Drop create_empty_drop(void);
 /* deletes all current drops */
 void reset_drops();
 
+void game_over_screen(void);
+void game_won(void);
+void level_won(void);
+int is_level_won(void);
+void load_next_bricks(const int level[MAX_ROWS][MAX_COLS]);
+
 #endif /* !LOGIC_H_ */

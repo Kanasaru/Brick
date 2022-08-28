@@ -1,10 +1,12 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_mixer.h>
+#include <SDL2/SDL_ttf.h>
 
 #include "defs.h"
 #include "structs.h"
 #include "event.h"
 #include "logic.h"
+#include "brick.h"
 
 void fps_dt(void)
 {
@@ -21,7 +23,7 @@ void fps_dt(void)
         app.dev.fps_n = now + 1000;
     }
     
-    app.dev.frc = floor((1000 + app.dev.dt) / FPS);
+    app.dev.frc = floor((1000 - app.dev.dt) / FPS);
     if (app.dev.frc < 0 )
         app.dev.frc = 0;
 }
@@ -668,6 +670,10 @@ void run_ball_logic(void)
             /* move the ball and set new direction */
             move_ball(move_x, move_y, ball.state.MOVE);
             ball.state.MOVE = new_direction;
+
+            if (is_level_won()) {
+                level_won();
+            }
         }
         /* not collision, then just move the ball */
         else {
@@ -683,6 +689,10 @@ void ball_lost(void)
     Mix_PlayChannel(-1, media.sounds.lost, 0);
     if (app.lives == 1) {
         /* game over */
+        game_over_screen();
+        load_bricks(1);
+        app.level = 0;
+        SDL_Delay(3000);
         app.lives = STARTING_LIVES;
     }
     else {
@@ -875,4 +885,126 @@ Drop create_empty_drop(void)
     empty_drop.color = (SDL_Color) { 0, 0, 0, 0 };
 
     return empty_drop;
+}
+
+void game_over_screen(void)
+{
+    TTF_Font *font;
+    SDL_Surface *text;
+    SDL_Texture *text_texture;
+    SDL_Color color_txt = { 255, 255, 255 };
+    
+    font = TTF_OpenFont(STD_FONT, 30 * 0.75);
+    if (!font) {
+        printf("%s\n", TTF_GetError());
+        exit(EXIT_FAILURE);
+    }
+    
+    text = TTF_RenderText_Solid(font, "GAME OVER", color_txt);
+    if (!text) {
+        printf("%s\n", TTF_GetError());
+        exit(EXIT_FAILURE);
+    }
+
+    text_texture = SDL_CreateTextureFromSurface(app.renderer, text);
+    SDL_Rect dest = { SCREEN_WIDTH / 2 - text->w / 2, 
+                      SCREEN_HEIGHT / 2 - text->h /2, text->w, text->h };
+    
+    SDL_RenderCopy(app.renderer, text_texture, 0, &dest);
+    
+    TTF_CloseFont(font);
+    SDL_DestroyTexture(text_texture);
+    SDL_FreeSurface(text);
+
+    SDL_RenderPresent(app.renderer);
+}
+
+int is_level_won(void)
+{
+    for (int i = 0; i < MAX_ROWS; ++i) {
+        for (int j = 0; j < MAX_COLS; ++j) {
+            if (app.bricks[i][j].hardness != 0) {
+                return 0;
+            }
+        }
+    }
+
+    return 1;
+}
+
+void level_won(void)
+{
+    switch (app.level)
+    {
+    case 1:
+        app.level++;
+        load_bricks(app.level);
+        break;
+    
+    case 2:
+        app.level++;
+        load_bricks(app.level);
+        break;
+
+    case 3:
+        app.level++;
+        load_bricks(app.level);
+        break;
+
+    case 4:
+        app.level++;
+        load_bricks(app.level);
+        break;
+
+    case 5:
+        game_won();
+        load_bricks(1);
+        break;
+    }
+    app.state.RUNNING = 0;
+    reset_drops();
+    reset_board();
+    reset_ball();
+}
+
+void game_won(void)
+{
+    app.lives = STARTING_LIVES;
+    app.level = 1;
+    app.points = 0;
+    
+    app.state.QUIT = 0;
+    app.state.PAUSE = 0;
+    app.state.RUNNING = 0;
+
+    TTF_Font *font;
+    SDL_Surface *text;
+    SDL_Texture *text_texture;
+    SDL_Color color_txt = { 255, 255, 255 };
+    
+    font = TTF_OpenFont(STD_FONT, 30 * 0.75);
+    if (!font) {
+        printf("%s\n", TTF_GetError());
+        exit(EXIT_FAILURE);
+    }
+    
+    text = TTF_RenderText_Solid(font, "GAME WON!!!", color_txt);
+    if (!text) {
+        printf("%s\n", TTF_GetError());
+        exit(EXIT_FAILURE);
+    }
+
+    text_texture = SDL_CreateTextureFromSurface(app.renderer, text);
+    SDL_Rect dest = { SCREEN_WIDTH / 2 - text->w / 2, 
+                      SCREEN_HEIGHT / 2 - text->h /2, text->w, text->h };
+    
+    SDL_RenderCopy(app.renderer, text_texture, 0, &dest);
+    
+    TTF_CloseFont(font);
+    SDL_DestroyTexture(text_texture);
+    SDL_FreeSurface(text);
+
+    SDL_RenderPresent(app.renderer);
+
+    SDL_Delay(5000);
 }

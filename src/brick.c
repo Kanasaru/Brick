@@ -1,6 +1,7 @@
 #include "defs.h"
 #include "structs.h"
 #include "brick.h"
+#include "level.h"
 
 Brick create_brick(int x, int y, int hd, float bn, int r, int g, int b)
 {
@@ -20,7 +21,33 @@ Brick create_brick(int x, int y, int hd, float bn, int r, int g, int b)
     return br;
 }
 
-void load_bricks(const int level[MAX_ROWS][MAX_COLS])
+void load_bricks(int level)
+{
+    switch (level)
+    {
+    case 1:
+        load_level(LEVEL_01);
+        break;
+
+    case 2:
+        load_level(LEVEL_02);
+        break;
+
+    case 3:
+        load_level(LEVEL_03);
+        break;
+
+    case 4:
+        load_level(LEVEL_04);
+        break;
+    
+    case 5:
+        load_level(LEVEL_05);
+        break;
+    }
+}
+
+void load_level(const int level[MAX_ROWS][MAX_COLS])
 {
     for (int i = 0; i < MAX_ROWS; ++i) {
         for (int j = 0; j < MAX_COLS; ++j) {

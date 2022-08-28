@@ -5,7 +5,6 @@
 #include "defs.h"
 #include "structs.h"
 #include "init.h"
-#include "level.h"
 #include "brick.h"
 #include "logic.h"
 
@@ -66,8 +65,8 @@ void init_game(void)
     app.state.QUIT = 0;
     app.state.PAUSE = 0;
     app.state.RUNNING = 0;
-    
-    load_bricks(LEVEL_01);
+
+    load_bricks(app.level);
 
     reset_drops();
     reset_board();
